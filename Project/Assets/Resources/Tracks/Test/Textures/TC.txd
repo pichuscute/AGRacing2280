@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<TXD>
+
+	<Defaults>
+		
+		<common>
+			<mips>No</mips>	
+			<bpp>8</bpp>
+			<flip>Y</flip>
+		</common>
+
+	</Defaults>
+
+
+</TXD>
