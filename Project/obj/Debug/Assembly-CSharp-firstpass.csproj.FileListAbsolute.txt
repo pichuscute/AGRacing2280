@@ -1,0 +1,10 @@
+D:\UnityProjects\AGRacing2280\Project\Temp\bin\Debug\Assembly-CSharp-firstpass.dll
+D:\UnityProjects\AGRacing2280\Project\Temp\bin\Debug\Assembly-CSharp-firstpass.pdb
+D:\UnityProjects\AGRacing2280\Project\Temp\bin\Debug\UnityEditor.dll
+D:\UnityProjects\AGRacing2280\Project\Temp\bin\Debug\UnityEngine.dll
+D:\UnityProjects\AGRacing2280\Project\Temp\bin\Debug\nunit.framework.dll
+D:\UnityProjects\AGRacing2280\Project\obj\Debug\Assembly-CSharp-firstpass.csprojResolveAssemblyReference.cache
+D:\UnityProjects\AGRacing2280\Project\obj\Debug\Assembly-CSharp-firstpass.dll
+D:\UnityProjects\AGRacing2280\Project\obj\Debug\Assembly-CSharp-firstpass.pdb
+D:\UnityProjects\AGRacing2280\Project\Temp\bin\Debug\Mono.Cecil.dll
+D:\UnityProjects\AGRacing2280\Project\Temp\bin\Debug\ICSharpCode.NRefactory.dll

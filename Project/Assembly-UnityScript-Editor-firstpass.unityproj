@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+	<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+	<ProductVersion>10.0.20506</ProductVersion>
+	<SchemaVersion>2.0</SchemaVersion>
+	<ProjectGuid>{6C4DB77C-CD79-0A4D-A312-CBAF7DF63023}</ProjectGuid>
+	<OutputType>Library</OutputType>
+	<AppDesignerFolder>Properties</AppDesignerFolder>
+	<RootNamespace></RootNamespace>
+	<AssemblyName>Assembly-UnityScript-Editor-firstpass</AssemblyName>
+	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+	<FileAlignment>512</FileAlignment>
+	<BaseDirectory>Assets</BaseDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+	<DebugSymbols>true</DebugSymbols>
+	<DebugType>full</DebugType>
+	<Optimize>false</Optimize>
+	<OutputPath>Temp\bin\Debug\</OutputPath>
+	<DefineConstants>DEBUG;TRACE;UNITY_STANDALONE_WIN;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_AUDIO_FMOD;UNITY_STANDALONE;ENABLE_MONO;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_GENERICS;ENABLE_SUBSTANCE;INCLUDE_WP8SUPPORT;ENABLE_MOVIES;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_DUCK_TYPING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;UNITY_4_3_2;UNITY_4_3;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN</DefineConstants>
+	<ErrorReport>prompt</ErrorReport>
+	<WarningLevel>4</WarningLevel>
+	<NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+	<DebugType>pdbonly</DebugType>
+	<Optimize>true</Optimize>
+	<OutputPath>Temp\bin\Release\</OutputPath>
+	<DefineConstants>TRACE</DefineConstants>
+	<ErrorReport>prompt</ErrorReport>
+	<WarningLevel>4</WarningLevel>
+	<NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+	<Reference Include="System" />
+    <Reference Include="System.XML" />
+	<Reference Include="System.Core" />
+	<Reference Include="System.Xml.Linq" />
+	<Reference Include="UnityEngine">
+	  <HintPath>D:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	</Reference>
+	<Reference Include="UnityEditor">
+	  <HintPath>D:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	</Reference>
+  </ItemGroup>
+  <ItemGroup>
+     <Compile Include="Assets\Standard Assets\Editor\Image Effects\AntialiasingAsPostEffectEditor.js" />
+     <Compile Include="Assets\Standard Assets\Editor\Image Effects\BloomAndLensFlaresEditor.js" />
+     <Compile Include="Assets\Standard Assets\Editor\Image Effects\ColorCorrectionCurvesEditor.js" />
+     <Compile Include="Assets\Standard Assets\Editor\Image Effects\DepthOfField34Editor.js" />
+     <Compile Include="Assets\Standard Assets\Editor\Image Effects\EdgeDetectEffectNormalsEditor.js" />
+     <Compile Include="Assets\Standard Assets\Editor\Image Effects\Editor\Image Effects\BloomEditor.js" />
+     <Compile Include="Assets\Standard Assets\Editor\Image Effects\Editor\Image Effects\CameraMotionBlurEditor.js" />
+     <Compile Include="Assets\Standard Assets\Editor\Image Effects\Editor\Image Effects\ColorCorrectionLutEditor.js" />
+     <Compile Include="Assets\Standard Assets\Editor\Image Effects\Editor\Image Effects\DepthOfFieldScatterEditor.js" />
+     <Compile Include="Assets\Standard Assets\Editor\Image Effects\Editor\Image Effects\NoiseAndGrainEditor.js" />
+     <Compile Include="Assets\Standard Assets\Editor\Image Effects\Editor\Image Effects\VignettingEditor.js" />
+     <Compile Include="Assets\Standard Assets\Editor\Image Effects\SunShaftsEditor.js" />
+     <Compile Include="Assets\Standard Assets\Editor\Image Effects\TiltShiftEditor.js" />
+     <Compile Include="Assets\Standard Assets\Editor\Image Effects\TonemappingEditor.js" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Mobile\Free\SHOnly.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cartoony_outline_cutout.shader" />
+     <None Include="Assets\Standard Assets\Projectors\Guidelines.txt" />
+     <None Include="Assets\Hard Surface Pro\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_DepthOfField\SeparableWeightedBlur.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Bumped_Ind_Specular.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Mobile\SkinTest.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Pro Draw First Opaque Diffuse.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\ParallaxOcclusion\ParallaxOcclusion.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Triplanar\TriplanarBumpedWorldRim.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Mobile\Free\SkinTest_Unmod.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cartoony_Transparent_sharp.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\ExampleData\InfiniteScanHead\Infinite-Scan_License.txt" />
+     <None Include="Assets\Tasharen\Water Example\Brigantine\Hull.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurfacePro Hidden Back Transparent Bump.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Relief_Detail_nshad.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cook-Torrance_Reflective_Bumped_Specular.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\TessellationMapDistance\Reflect-TessellationMapDistanceSpecMap.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\TessellationMapDistance\Bump\Reflect-BumpedSpecular.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Reflect-Bumped_Fresnel.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Mobile\Free\MobileToon_mod.shader" />
+     <None Include="Assets\Hard Surface Pro\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\ExtractSkyboxShader.shader" />
+     <None Include="Assets\BEP.Vol.2\Environment\FX\River\Water\WaterShader.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\TessellationMapEdgeLength\Bump\Reflect-BumpedSpecMap.shader" />
+     <None Include="Assets\Effects\glareFX\!readme.txt" />
+     <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Multiply.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cartoony_cutout.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\AdvancedSS.cginc" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurfaceProScreenSpaceReflection.cginc" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Translucent.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Pro Draw Last Opaque Diffuse.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cartoony_cutout.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Mobile\Rim_Trans_unlit.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Bump\Bumped-Ramp.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cook-Torrance_Reflective_Parallax_Shaded_Specular_Fresnel.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurfacePro Hidden Front Transparent.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\TessellationMapEdgeLength\AlphaTest-Reflect-TessellationMapEdgeLengthSpecular.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Mobile\Mobile_Spec.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Bumped_Detail.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Draw First Transparent Specular Internal Faces.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Parallax_Shaded_Specular.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cook-Torrance_Reflective_Parallax_Shaded_Specular.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurfacePro Hidden Front Transparent Specular.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurfaceProScreenSpaceRefraction.cginc" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Relief_Mapping_Shaded_Specular_SC.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cartoony_outline_only.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Fast_Skin.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Pro Opaque.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Standard\DiffuseSpecMap.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cartoony_outline_transparent_sepspec_sharp.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Bump\Reflect-BumpedSpecular.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Free Transparent Specular.shader" />
+     <None Include="Assets\Hard Surface Pro\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\HollywoodFlareBlur.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cook-Torrance-Parallax_Specular.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Mobile\Standard\Mobile-DiffuseSpecMap.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Simple_SSS_Skin.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Relief_Detail.shader" />
+     <None Include="Assets\ExtraShaders\Shaders\ParallaxShadedSpecular.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Free Transparent Bump.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\OutlineGlow\TopDrawShader.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Skinshader 1.3.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Mobile\TranslucencyVertex_SH.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Reflective_Parallax_Shaded_Specular.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Triplanar\TriplanarLocal.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Rim_Transparent_1side_unlit.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cartoony_cutout_sspec_sharp.shader" />
+     <None Include="Assets\ExtraShaders\Shaders\DoubleSided.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cartoony_outline_cutout_sspec_sharp.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\ParallaxOcclusion\ParallaxOcclusionSpecular.shader" />
+     <None Include="Assets\Standard Assets\Tessellation Shaders\BumpedSpecularSmooth.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurfaceLighting.cginc" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cook-Torrance_Reflective_Parallax_Shaded_Specular.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Mobile\Standard\Mobile-DiffuseGlossMapEmissive-Ramp.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface.cginc" />
+     <None Include="Assets\Hard Surface Pro\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_DepthOfField\PreDepthOfFieldZRead.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Skin\SkinShading-GlossMap.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Standard\Reflect-DiffuseSpecMap.shader" />
+     <None Include="Assets\Hard Surface Pro\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_DepthOfField\DepthOfField31.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Bump\BumpedSpecular.shader" />
+     <None Include="Assets\Hard Surface Pro\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_DepthOfField\CopyDepthToRGBA.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\ParallaxOcclusion\ParallaxOcclusionSpecMap.shader" />
+     <None Include="Assets\Standard Assets\Particles\Sources\Shaders\Particle Alpha Blend (Queue +100).shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cartoony_outline_cutout.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Bump\BumpedSpecMap.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cartoony_outline_transparent_sepspec_sharp.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Mobile\Standard\Mobile-DiffuseEmissive-Ramp.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cartoony_outline_transparent_sharp.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cartoony_sharp.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Bumped_Diffuse_Detail.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Free Opaque.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Mobile\Mobile_DSpec_unmod.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cartoony_cutout_sharp.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Skinshader 1.3_sspec_cutout.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Pro Draw First Opaque.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Triplanar\TriplanarBumpedWorld.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\OutlineGlow\DepthNormalTexture.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cartoony_outline_only_sharp.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cartoony_outline_only_sharp.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Skinshader 1.3_sspec.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Volumetric\SphereVolume\SphereVolume.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Draw First Transparent Specular.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cartoony_Transparent.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Mobile\MobileToon_mod.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Bump\Reflect-BumpedSpecMapEmissive.shader" />
+     <None Include="Assets\Resources\WipeoutPulse\Shaders\HeatDistortion.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Standard\DiffuseSpecularRim-Ramp.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Mobile\Free\Mobile_Spec_unmodulated.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cook-Torrance-Parallax_Shaded_Specular.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Standard\Reflect-Diffuse.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cartoony_ramped_sharp.shader" />
+     <None Include="Assets\Resources\Materials\Test.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Parallax_Detail.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cartoony_outline_transparent.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Volumetric\BoxVolume\BoxVolume.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\ForceField.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Mobile\Free\SHOnly_unmod.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cartoony_cutout_sspec.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Reflect-BumpSpec_Fresnel.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cook-Torrance_Reflective_Parallax_Specular.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cook-Torrance_Reflective_Bumped_Specular.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cartoony_outline_cutout_sspec.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Mobile\Standard\Mobile-DiffuseSpecularRim.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Reflect-Diffuse_Fresnel.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Skin\SkinShading.shader" />
+     <None Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Shaders\FX-SimpleWater4.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Rim_Transparent_1side.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\CgHelper.cginc" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Mobile\Bump\Mobile-Bumped.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Pro Draw First Transparent Specular.shader" />
+     <None Include="Assets\Standard Assets\Skyboxes\_skybox info.txt" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cartoony_cutout_sspec_sharp.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cartoony_outline_cutout_sharp.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Pro Draw First Transparent Diffuse.shader" />
+     <None Include="Assets\Hard Surface Pro\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_DepthOfField\PreDepthOfField.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Bump\Reflect-BumpedSpecularEmissive.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Screen Space Subsurface Scattering\Skinshader_pass2.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Screen Space Subsurface Scattering\Skinshader_pass1.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Rim_Transparent_2side.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Standard\Reflect-DiffuseSpecular.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\TessellationPhong\Reflect-TessellationPhongSpecMap-Ramp.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Mobile\Bump\Mobile-BumpedSpecMap.shader" />
+     <None Include="Assets\ExtraShaders\Shaders\Dissolving.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurfacePro Hidden Front Opaque Bump.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Draw First Transparent.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Parallax_Shaded_Specular.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\MLSSS_Skin_V1.21.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Mobile\MobileToon_mod_lightmapped.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cook-Torrance_Reflective_Bumped_Specular_Fresnel.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Mobile\Standard\Mobile-DiffuseSpecularEmissive-Ramp.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Translucency_nshad.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Pro Draw First Opaque Bump.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Rim_Transparent_1side.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Mobile\Free\SkinTest.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cartoony_outline_cutout_sharp.shader" />
+     <None Include="Assets\Hard Surface Pro\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\SkyboxToRGBADepth.shader" />
+     <None Include="Assets\ExtraShaders\Shaders\LightedBumpedOutline.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Reflect-ParallaxSpec_Fresnel.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Simple_SSS_Skin_cutout.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Standard\DiffuseSpecular.shader" />
+     <None Include="Assets\Hard Surface Pro\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\addalphahack.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Free Transparent.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\TessellationMapDistance\Bump\BumpedSpecular.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Mobile\Rim_Opaque.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Pro Transparent Bump.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Pro Draw Last Opaque Specular.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\OutlineGlow\MixShader.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Draw First Transparent Diffuse Internal Faces.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Relief_Detail_SC_nshad.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cartoony_outline_cutout_sspec_sharp.shader" />
+     <None Include="Assets\Tasharen\Water Example\Willow\Tree.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Relief_Detail_nshad.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\RCSM\RCSM.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Screen Space Subsurface Scattering\S5_depth.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\TessellationMapFixed\Bump\Reflect-BumpedSpecMap.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Reflect-ParallaxSpec_Fresnel.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurfacePro Hidden Front Opaque Diffuse.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Standard\DiffuseSpecularRim.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Free Transparent Diffuse.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Standard\DiffuseSpecular-Ramp.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\IBL\Simple_IBL.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Pro Draw Last Transparent.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Standard\DiffuseGlossMap.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Standard\DiffuseRim-Ramp.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Mobile\SHOnly.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\RCSM\RCSMSpecular.shader" />
+     <None Include="Assets\Hard Surface Pro\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\Luminance2NormalsBlur.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurfacePro Hidden Back Transparent Diffuse.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Free Opaque Diffuse.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Draw Last Transparent Specular.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Parallax_Detail.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Relief_Detail_SC.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cartoony_outline_only.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Rim_Transparent_2side_unlit.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Translucent_fresnel.shader" />
+     <None Include="Assets\ExtraShaders\Shaders\MetallicToon.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Mobile\Free\Mobile_DSpec_unmod.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurfacePro Hidden Back Transparent Specular.shader" />
+     <None Include="Assets\Standard Assets\Projectors\Sources\Shaders\Projector Light.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Triplanar\TriplanarBumpedLocalRim.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cartoony_Transparent.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Readme.txt" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\OutlineGlow\SecondPassShader.shader" />
+     <None Include="Assets\Hard Surface Pro\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_DepthOfField\SeparableBlurDof.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Screen Space Subsurface Scattering\Skinshader_pass1_deferred.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Skinshader 1.3.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cook-Torrance-Parallax_Shaded_Specular.shader" />
+     <None Include="Assets\Standard Assets\Water (Basic)\Sources\Shaders\FX-Water Simple.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\RCSM\Reflect-RCSMSpecMap.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Skinshader 1.3_sspec.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cartoony_outline_transparent_sepspec.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Simple_SSS_Skin.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Relief_Mapping_Specular_SC_nshad.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Free Opaque Bump.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Pro Draw First Transparent Bump.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\ForceField_rim_1side.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Pro Draw Last Opaque.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Bumped_Diffuse_Detail.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Pro Transparent Specular.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Draw First Transparent Internal Faces.shader" />
+     <None Include="Assets\ExtraShaders\Shaders\SimpleGlass.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Mobile\Free\MobileToon_mod_lightmapped.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Bump\BumpedSpecular-Ramp.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Transparent Diffuse.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Draw First Transparent Diffuse.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurfacePro Hidden Back Transparent.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Pro Draw Last Transparent Specular.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Relief_Detail_SC.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Mobile\Mobile_Spec_unmodulated.shader" />
+     <None Include="Assets\Hard Surface Pro\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_DepthOfField\SeparableWeightedBlurDof.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Volumetric\ConeVolume\ConeVolume.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Screen Space Subsurface Scattering\CgHelper.cginc" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Mobile\Free\GSH9.cginc" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Rim_Opaque.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Relief_Mapping_Specular_nshad.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Reflective_Parallax_Shaded_Specular_Fresnel.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Screen Space Subsurface Scattering\Skinshader_pass1_deferred.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cartoony_Transparent_sharp.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\ForceField_rim.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Bump\Bumped.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Reflect-BumpSpec_Fresnel.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Transparent Bump.shader" />
+     <None Include="Assets\ExtraShaders\Shaders\CookTorrance.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cartoony_ramped.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Relief_Mapping_Specular_SC_nshad.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Triplanar\TriplanarWorldRim.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\TessellationMapFixed\TessellationMapFixed.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cook-Torrance-Bumped_Specular.shader" />
+     <None Include="Assets\Standard Assets\Water (Pro Only)\Sources\Shaders\FX-Water.shader" />
+     <None Include="Assets\ExtraShaders\Shaders\OutlinedSilhouetteOnly.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Standard\Diffuse-Ramp.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Mobile\SHOnly_unmod.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\CgHelper.cginc" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurfacePro Hidden Front Transparent Diffuse.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Parallax_Detail_shaded.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Reflect-Parallax_Fresnel.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Pro Transparent Diffuse.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Documentation.txt" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Pro Draw Last Opaque Bump.shader" />
+     <None Include="Assets\Hard Surface Pro\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_DepthOfField\DofForegroundBlur.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurfacePro Hidden Front Opaque.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Parallax_Detail_shaded.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Simple_SSS_Skin_cutout.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cartoony_outline_transparent_sepspec.shader" />
+     <None Include="Assets\Effects\glareFX\Shaders\glareFXClassic.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Pro Opaque Specular.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Reflective_Parallax_Shaded_Specular.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Reflect-Glossy_Fresnel.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Reflect-Bumped_Fresnel.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Translucent_fresnel.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurfacePro Hidden Front Transparent Bump.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Draw First Transparent Bump Internal Faces.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\TessellationMapDistance\Bump\Reflect-BumpedSpecMap.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cook-Torrance_Reflective_Bumped_Specular_Fresnel.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cook-Torrance_Reflective_Parallax_Specular.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Reflect-Glossy_Fresnel.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cartoony_outline_transparent.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Pro Draw Last Transparent Bump.shader" />
+     <None Include="Assets\Hard Surface Pro\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_DepthOfField\SeparableRGBADepthBlur.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Triplanar\TriplanarLocalRim.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Translucent.shader" />
+     <None Include="Assets\Hard Surface Pro\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\HollywoodFlareStretch.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Standard\Reflect-DiffuseEmissive.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cook-Torrance-Bumped_Specular.shader" />
+     <None Include="Assets\ExtraShaders\Shaders\FastSkinshader.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Reflect-Diffuse_Fresnel.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Draw First Transparent Bump.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\TessellationMapEdgeLength\Reflect-TessellationMapEdgeLengthSpecular.shader" />
+     <None Include="Assets\Effects\glareFX\Shaders\glareFXChromatic.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Rim_Transparent_2side.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Mobile\Standard\Mobile-DiffuseRim.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cartoony.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Relief_Detail.shader" />
+     <None Include="Assets\BIG_Environment_Pack\Readme.txt" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\OutlineGlow\BlurShader.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Pro Opaque Diffuse.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Relief_Mapping_Shaded_Specular.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cartoony_cutout_sspec.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cook-Torrance-Parallax_Specular.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Relief_Detail_SC_nshad.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Mobile\Free\TranslucencyVertex_SH.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\RCSM\Reflect-RCSMSpecular.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Mobile\SkinTest_Unmod.shader" />
+     <None Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Shaders\WaterInclude.cginc" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\AdvancedSSFunctions.cginc" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Draw Last Transparent Bump.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cartoony_outline_transparent_sharp.shader" />
+     <None Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Shaders\FX-Water4.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Reflect-Parallax_Fresnel.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Relief_Mapping_Specular_nshad.shader" />
+     <None Include="Assets\Effects\glareFX\Shaders\glareFXCheapSM20.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Pro Opaque Bump.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Cartoony.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Relief_Mapping_Shaded_Specular_SC.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Skinshader 1.3_sspec_cutout.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Velvet_Silk.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Mobile\Free\Rim_Opaque.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cook-Torrance_Reflective_Parallax_Shaded_Specular_Fresnel.shader" />
+     <None Include="Assets\Hard Surface Pro\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_DepthOfField\DepthOfField.shader" />
+     <None Include="Assets\Objects\Nature\BIG_Environment_Pack\Shader\Dif_Nor_Spec.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Rim_Opaque.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Triplanar\TriplanarWorld.shader" />
+     <None Include="Assets\Standard Assets\Tessellation Shaders\BumpedSpecularDisplacement.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cartoony_sharp.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Free Opaque Specular.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Screen Space Subsurface Scattering\CgHelper.cginc" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cartoony_ramped_sharp.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Bumped_Detail.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cartoony_ramped.shader" />
+     <None Include="Assets\Tasharen\Water\Tasharen Water.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Pro Draw First Transparent.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cartoony_cutout_sharp.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Draw Last Transparent Diffuse.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Pro Transparent.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Reflective_Parallax_Shaded_Specular_Fresnel.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Mobile\Free\Mobile_Spec.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Pro Draw Last Transparent Diffuse.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Screen Space Subsurface Scattering\Skinshader_pass1.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurfacePro Hidden Front Opaque Specular.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Mobile\Standard\Mobile-Reflect-DiffuseSpecular.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Transparent.shader" />
+     <None Include="Assets\ExtraShaders\Shaders\Shield.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Triplanar\RunningWater.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Cartoony_outline_cutout_sspec.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\3.5\Relief_Mapping_Shaded_Specular.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Screen Space Subsurface Scattering\S5_mix.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\Mobile\Rim_Trans_unlit_doublesided.shader" />
+     <None Include="Assets\Shaders\Chickens Shader Bundle\Shaders\ForceField_1side.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Transparent Specular.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Draw Last Transparent.shader" />
+     <None Include="Assets\AdvancedSurfaceShaders\Shaders\Triplanar\TriplanarBumpedLocal.shader" />
+     <None Include="Assets\Hard Surface Pro\HardSurface Shaders\HardSurface Pro Draw First Opaque Specular.shader" />
+ <Reference Include="UnityEditor.Graphs">
+ <HintPath>D:\Program Files (x86)\Unity\Editor\Data\Managed\UnityEditor.Graphs.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.iOS.Extensions">
+ <HintPath>D:\Program Files (x86)\Unity\Editor\Data\PlaybackEngines\iPhonePlayer\EditorExtensions\UnityEditor.iOS.Extensions.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.WP8.Extensions">
+ <HintPath>D:\Program Files (x86)\Unity\Editor\Data\PlaybackEngines\WP8Support\EditorExtensions\UnityEditor.WP8.Extensions.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.Metro.Extensions">
+ <HintPath>D:\Program Files (x86)\Unity\Editor\Data\PlaybackEngines\MetroSupport\EditorExtensions\UnityEditor.Metro.Extensions.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.BB10.Extensions">
+ <HintPath>D:\Program Files (x86)\Unity\Editor\Data\PlaybackEngines\BB10Player\EditorExtensions\UnityEditor.BB10.Extensions.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.Android.Extensions">
+ <HintPath>D:\Program Files (x86)\Unity\Editor\Data\PlaybackEngines\AndroidPlayer\EditorExtensions\UnityEditor.Android.Extensions.dll</HintPath>
+ </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
+      <Project>{EB8AA23C-2655-E22B-2EBB-05697394EDB3}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
+    <ProjectReference Include="Assembly-UnityScript-firstpass.unityproj">
+      <Project>{6F4D0F38-84A9-F27A-19D7-9961C098D6DA}</Project>      <Name>Assembly-UnityScript-firstpass</Name>    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+	   Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  
+</Project>
