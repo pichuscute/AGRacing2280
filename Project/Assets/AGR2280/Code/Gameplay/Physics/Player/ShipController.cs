@@ -280,6 +280,9 @@ public class ShipController : MonoBehaviour {
 
 	float backGravity;
 
+	float shipFrontHover;
+	float shipBackHover;
+
 	// Ship Acceleration
 	public float shipThrust;
 	public float shipAccel;
@@ -727,9 +730,6 @@ public class ShipController : MonoBehaviour {
 				// Rotate to track normals
 				if (frontHit.collider.gameObject.layer != LayerMask.NameToLayer("Track_Wall"))
 				{
-					//wantedTrackRot = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.Cross(transform.right, frontHit.normal), frontHit.normal), Time.deltaTime * 12);
-					//transform.rotation = Quaternion.Slerp(transform.rotation, wantedTrackRot, Time.deltaTime * 10);
-
 					wantedTrackRot = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.Cross(transform.right, frontHit.normal), frontHit.normal), Time.deltaTime * hoverRotToSpeed);
 					transform.rotation = Quaternion.Slerp(transform.rotation, wantedTrackRot, Time.deltaTime * hoverRotNowSpeed);
 				}
@@ -753,7 +753,21 @@ public class ShipController : MonoBehaviour {
 				
 				Vector3 springN = spring / length;
 				Vector3 restoreForce = springN*(displacement*springCost);
-				rigidbody.AddForceAtPosition(new Vector3(0, -restoreForce.y, 0), RaycastFrontPos);
+
+				float damper = 3f * rigidbody.velocity.y;
+
+				// Apply Hover
+				shipFrontHover = -restoreForce.y;
+				shipFrontHover -= damper;
+
+				if (frontHit.distance < shipAntiGravRideHeight / 2)
+				{
+					// Double the rotation speed
+					wantedTrackRot = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.Cross(transform.right, frontHit.normal), frontHit.normal), Time.deltaTime * hoverRotToSpeed);
+					transform.RotateAround(RaycastFrontPos, transform.right, wantedTrackRot.w);
+				}
+
+				rigidbody.AddForceAtPosition(new Vector3(0, shipFrontHover, 0), RaycastFrontPos);
 				print (restoreForce.y);
 
 				// Complete stop
@@ -856,7 +870,13 @@ public class ShipController : MonoBehaviour {
 				
 				Vector3 springN = spring / length;
 				Vector3 restoreForce = springN*(displacement*springCost);
-				rigidbody.AddForceAtPosition(new Vector3(0, -restoreForce.y, 0), RaycastBackPos);
+
+				float damper = 3f * rigidbody.velocity.y;
+
+				shipBackHover = -restoreForce.y;
+				shipBackHover -= damper;
+
+				rigidbody.AddForceAtPosition(new Vector3(0, shipBackHover, 0), RaycastBackPos);
 			} else 
 			{
 				shipBackHoverDamping = 20;
@@ -870,6 +890,7 @@ public class ShipController : MonoBehaviour {
 		{
 			shipGravity = shipPhysicsTrackGravity;
 			shipFallingSlowdown = 0;
+			backGravity = 0;
 		} else 
 		{
 			if (frontHit.distance > shipAntiGravRideHeight + shipAntiGravReboundJumpTime)
@@ -887,20 +908,15 @@ public class ShipController : MonoBehaviour {
 				shipFallingSlowdown = Mathf.Lerp( shipFallingSlowdown, shipAntiGravRebound, Time.deltaTime * shipPhysicsNormalGravity);
 				shipGravity = Mathf.Lerp(shipGravity, shipPhysicsTrackGravity * (rigidbody.drag + shipPhysicsMass), Time.deltaTime * shipFallingSlowdown);
 			}
+			backGravity = Mathf.Lerp(backGravity, shipGravity / 10, Time.deltaTime * shipPhysicsNormalGravity * 10);
 
-			float shipAngle = 360 - transform.localEulerAngles.x;
-			if (shipAngle < 90 && (RaycastFrontDistance > shipAntiGravRideHeight + 3))
-			{
-				backGravity = Mathf.Lerp(backGravity, shipGravity / 10, Time.deltaTime * 1.8f);
-				rigidbody.AddForceAtPosition(new Vector3(0,-backGravity,0), RaycastBackPos);
-			} else 
-			{
-				backGravity = 0;
-			}
 		}
 
 		// Apply Gravity
 		rigidbody.AddForce(new Vector3(0,-shipGravity,0));
+
+		// Apply backend gravity
+		rigidbody.AddForceAtPosition(new Vector3(0,-backGravity,0), RaycastBackPos);
 
 		// Test Turbo
 
@@ -1519,7 +1535,11 @@ public class ShipController : MonoBehaviour {
 	void OnCollisionEnter(Collision other)
 	{
 		ScrapeParticles.transform.parent = null;
-		Audio_WallScrape.GetComponent<AudioSource>().Play();
+		if (other.collider.gameObject.layer != LayerMask.NameToLayer("Track_Floor"))
+		{
+			Audio_WallScrape.GetComponent<AudioSource>().Play();
+		}
+
 		ScrapeParticles.GetComponent<ParticleSystem>().enableEmission = true;
 		ScrapeParticles.transform.position = other.contacts[0].point;
 
