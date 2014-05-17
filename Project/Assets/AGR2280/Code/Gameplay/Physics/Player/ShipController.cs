@@ -289,6 +289,13 @@ public class ShipController : MonoBehaviour {
 	public bool isThrusting;
 	public float deaccelAmount;
 
+	public float airResistanceGain;
+	public float airResistance;
+	public bool isAR;
+
+	public float deaccelAB;
+	public float deaccelAR;
+
 	// Boost
 	public float shipBoostAmount;
 	public float shipBoostTimer;
@@ -714,6 +721,7 @@ public class ShipController : MonoBehaviour {
 			if (frontHit.distance < shipAntiGravRideHeight)
 			{
 				isGrounded = true;
+				isAR = false;
 
 				// Detect if on Magstrip
 				if (frontHit.collider.gameObject.layer == LayerMask.NameToLayer("MagStrip"))
@@ -754,11 +762,8 @@ public class ShipController : MonoBehaviour {
 				Vector3 springN = spring / length;
 				Vector3 restoreForce = springN*(displacement*springCost);
 
-				float damper = 3f * rigidbody.velocity.y;
-
 				// Apply Hover
 				shipFrontHover = -restoreForce.y;
-				shipFrontHover -= damper;
 
 				if (frontHit.distance < shipAntiGravRideHeight / 2)
 				{
@@ -810,7 +815,7 @@ public class ShipController : MonoBehaviour {
 				{
 					transform.Rotate(new Vector3(1 * -shipAngleFront, 0, 0) * Time.fixedDeltaTime * shipAnglePitchHelp);
 				}
-				shipFrontHoverDamping = 20;
+				shipFrontHoverDamping = 0;
 			}
 
 			// Pads
@@ -837,7 +842,7 @@ public class ShipController : MonoBehaviour {
 			{
 				transform.Rotate(new Vector3(1 * shipAngle, 0, 0) * Time.fixedDeltaTime  * shipAnglePitchHelp);
 			}
-			shipFrontHoverDamping = 20;
+			shipFrontHoverDamping = 0;
 			isGrounded = false;
 			canRespawn = true;
 			respawnLength = 0.4f;
@@ -871,7 +876,8 @@ public class ShipController : MonoBehaviour {
 				Vector3 springN = spring / length;
 				Vector3 restoreForce = springN*(displacement*springCost);
 
-				float damper = 3f * rigidbody.velocity.y;
+				shipBackHoverDamping = 1.5f;
+				float damper = shipBackHoverDamping * rigidbody.velocity.y;
 
 				shipBackHover = -restoreForce.y;
 				shipBackHover -= damper;
@@ -879,11 +885,11 @@ public class ShipController : MonoBehaviour {
 				rigidbody.AddForceAtPosition(new Vector3(0, shipBackHover, 0), RaycastBackPos);
 			} else 
 			{
-				shipBackHoverDamping = 20;
+				shipBackHoverDamping = 0;
 			}
 		} else
 		{
-			shipBackHoverDamping = 20;
+			shipBackHoverDamping = 0;
 		}
 
 		if (isGrounded)
@@ -895,6 +901,7 @@ public class ShipController : MonoBehaviour {
 		{
 			if (frontHit.distance > shipAntiGravRideHeight + shipAntiGravReboundJumpTime)
 			{
+				isAR = true;
 				shipFallingSlowdown = Mathf.Lerp( shipFallingSlowdown, 1.5f, Time.deltaTime * 8);
 				shipGravity = Mathf.Lerp(shipGravity, shipPhysicsFlightGravity * (rigidbody.drag + shipPhysicsMass), Time.deltaTime * shipFallingSlowdown);
 
@@ -1312,20 +1319,40 @@ public class ShipController : MonoBehaviour {
 			{
 				if (isGrounded)
 				{
-					shipAirBrakeAccelLossVelocityDamper = Mathf.Lerp (shipAirBrakeAccelLossVelocityDamper, shipAntiGravGripAir * 1.2f, Time.deltaTime * 2);
+					shipAirBrakeAccelLossVelocityDamper = Mathf.Lerp (shipAirBrakeAccelLossVelocityDamper, shipAntiGravGripAir * 1.2f, Time.deltaTime * 3);
 				} else 
 				{
 					shipAirBrakeAccelLossVelocityDamper = Mathf.Lerp (shipAirBrakeAccelLossVelocityDamper, shipAntiGravGripGround * rigidbody.drag, Time.deltaTime * shipAirbrakeGrip);
 				}
 				shipAirbrakeAccelLossVelocity = Mathf.Lerp (shipAirbrakeAccelLossVelocity, 1, Time.deltaTime * shipAirBrakeAccelLossVelocityDamper);
-				deaccelAmount = (rotationForce / shipAirbrakeAccelLossVelocity) * (shipAccel);
+				deaccelAB = (rotationForce / shipAirbrakeAccelLossVelocity) * (shipAccel);
 			} else 
 			{
 				shipAirBrakeAccelLossVelocityDamper = 0;
 				shipAirbrakeAccelLossVelocity = 4;
-				deaccelAmount = (rotationForce * (shipTurnMax * 0.2f)) * (shipAccel);
+				deaccelAB = (rotationForce * (shipTurnMax * 0.2f)) * (shipAccel);
 			}
+
 			
+			// Air resistance
+			if (isAR)
+			{
+				airResistanceGain = Mathf.Lerp (airResistanceGain, shipAntiGravGripAir * 8, Time.deltaTime * (2 + (shipAirbrakeAccelLossVelocity / 5)));
+				airResistance = Mathf.Lerp (airResistance, airResistanceGain, Time.deltaTime * shipAntiGravGripAir * (2 + (shipAirbrakeAccelLossVelocity / 5)));
+				deaccelAR = airResistance;
+			} else 
+			{
+				airResistance = 0;
+				airResistanceGain = 0;
+				deaccelAR = 0;
+			}
+
+			if (deaccelAB < 0)
+			{
+				deaccelAB = -deaccelAB;
+			}
+			deaccelAmount = (deaccelAB + deaccelAR);
+
 			if (deaccelAmount < 0)
 			{
 				deaccelAmount = -deaccelAmount;
