@@ -1,8 +1,8 @@
 Shader "FX/Water" { 
 Properties {
-	_WaveScale ("Wave scale", Range (0.02,0.15)) = 0.063
-	_ReflDistort ("Reflection distort", Range (0,1.5)) = 0.44
-	_RefrDistort ("Refraction distort", Range (0,1.5)) = 0.40
+	_WaveScale ("Wave scale", Range (0.0001,0.15)) = 0.063
+	_ReflDistort ("Reflection distort", Range (-5,5)) = 0.44
+	_RefrDistort ("Refraction distort", Range (-5,5)) = 0.40
 	_RefrColor ("Refraction color", COLOR)  = ( .34, .85, .92, 1)
 	_Fresnel ("Fresnel (A) ", 2D) = "gray" {}
 	_BumpMap ("Normalmap ", 2D) = "bump" {}
