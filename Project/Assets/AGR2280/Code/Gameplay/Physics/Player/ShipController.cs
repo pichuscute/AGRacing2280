@@ -405,6 +405,14 @@ public class ShipController : MonoBehaviour {
 
 		SetupValues();
 
+		// Position at start pad
+		if (GameObject.Find("StartPad_1"))
+		{
+			GameObject startPad = GameObject.Find ("StartPad_1");
+			transform.position = new Vector3(startPad.transform.position.x, startPad.transform.position.y + shipAntiGravRideHeight - 1, startPad.transform.position.z);
+			transform.rotation = Quaternion.Euler (transform.eulerAngles.x, startPad.transform.eulerAngles.y, transform.eulerAngles.z);
+		}
+
 		// Set default respawn position
 		respawnPosition = transform.position;
 		respawnRotation = transform.rotation;
