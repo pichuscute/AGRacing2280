@@ -328,6 +328,8 @@ public class ShipController : MonoBehaviour {
 	float shipReturnBankSpeed;
 	float shipActualBank;
 
+	float shipBankVelocity;
+
 	// Wobble
 	float shipWobbleAmount;
 	float shipWobbleSpeed;
@@ -382,7 +384,13 @@ public class ShipController : MonoBehaviour {
 	public bool hasSideShiftLeft;
 	public bool hasSideShiftRight;
 	public float sideShiftCooldown;
-	
+
+	// Respawn
+	float respawnTimer;
+	float respawnLength;
+	Vector3 respawnPosition;
+	Quaternion respawnRotation;
+	bool canRespawn;
 
 	void Start () 
 	{
@@ -397,6 +405,10 @@ public class ShipController : MonoBehaviour {
 
 		SetupValues();
 
+		// Set default respawn position
+		respawnPosition = transform.position;
+		respawnRotation = transform.rotation;
+
 	}
 
 	void Update()
@@ -410,7 +422,14 @@ public class ShipController : MonoBehaviour {
 	}
 	void FixedUpdate () 
 	{
-		ShipGravity();
+		if (onMagStrip)
+		{
+			ShipMagStrip();
+		} else 
+		{
+			ShipGravity();
+		}
+		ShipRespawn();
 		ShipTurning();
 		ShipAcceleration();
 		ShipSideShift();
@@ -679,10 +698,18 @@ public class ShipController : MonoBehaviour {
 		RaycastHit frontHit;
 		if (Physics.Raycast(RaycastFrontPos, -Vector3.up, out frontHit))
 		{
+			canRespawn = false;
 			RaycastFrontDistance = frontHit.distance;
 			if (frontHit.distance < shipAntiGravRideHeight)
 			{
 				isGrounded = true;
+
+				// Detect if on Magstrip
+				if (frontHit.collider.gameObject.layer == LayerMask.NameToLayer("MagStrip"))
+				{
+					onMagStrip = true;
+				}
+
 				shipFrontHoverDamping = Mathf.Lerp(shipFrontHoverDamping, 10, Time.deltaTime * shipAntiGravLandingRebound);
 				shipAnglePitchHelp = 0;
 				rigidbody.angularDrag = groundAngularDrag;
@@ -699,6 +726,12 @@ public class ShipController : MonoBehaviour {
 					transform.rotation = Quaternion.Slerp(transform.rotation, wantedTrackRot, Time.deltaTime * hoverRotNowSpeed);
 				}
 
+				// Respawn 
+				if (frontHit.collider.gameObject.tag != "TrackSegment")
+				{
+					canRespawn = true;
+					respawnLength = 0.9f;
+				}
 
 				// Apply Force
 				//rigidbody.AddForceAtPosition(new Vector3(0, hoverForce, 0), RaycastFrontPos);
@@ -784,6 +817,8 @@ public class ShipController : MonoBehaviour {
 			}
 			shipFrontHoverDamping = 20;
 			isGrounded = false;
+			canRespawn = true;
+			respawnLength = 0.4f;
 		}
 
 		RaycastHit backHit;
@@ -825,12 +860,25 @@ public class ShipController : MonoBehaviour {
 
 		if (isGrounded)
 		{
-			shipGravity = Mathf.Lerp(shipGravity, shipPhysicsTrackGravity, Time.deltaTime * shipPhysicsNormalGravity);
+			shipGravity = shipPhysicsTrackGravity;
 			shipFallingSlowdown = 0;
 		} else 
 		{
-			shipFallingSlowdown = Mathf.Lerp( shipFallingSlowdown, 1.5f, Time.deltaTime * 8);
-			shipGravity = Mathf.Lerp(shipGravity, shipPhysicsFlightGravity * (rigidbody.drag + shipPhysicsMass), Time.deltaTime * shipFallingSlowdown);
+			if (frontHit.distance > shipAntiGravRideHeight + shipAntiGravReboundJumpTime)
+			{
+				shipFallingSlowdown = Mathf.Lerp( shipFallingSlowdown, 1.5f, Time.deltaTime * 8);
+				shipGravity = Mathf.Lerp(shipGravity, shipPhysicsFlightGravity * (rigidbody.drag + shipPhysicsMass), Time.deltaTime * shipFallingSlowdown);
+
+				// Terminal Velocity Check
+				if (shipGravity > (((shipPhysicsFlightGravity * (rigidbody.drag + shipPhysicsMass)) / 4) * 2.8f))
+				{
+					shipReachedTerminalVelocity = true;
+				}
+			} else 
+			{
+				shipFallingSlowdown = Mathf.Lerp( shipFallingSlowdown, shipAntiGravRebound, Time.deltaTime * shipPhysicsNormalGravity);
+				shipGravity = Mathf.Lerp(shipGravity, shipPhysicsTrackGravity * (rigidbody.drag + shipPhysicsMass), Time.deltaTime * shipFallingSlowdown);
+			}
 
 			float shipAngle = 360 - transform.localEulerAngles.x;
 			if (shipAngle < 90 && (RaycastFrontDistance > shipAntiGravRideHeight + 3))
@@ -841,12 +889,6 @@ public class ShipController : MonoBehaviour {
 			{
 				backGravity = 0;
 			}
-		}
-
-		// Terminal Velocity Check
-		if (shipGravity > (((shipPhysicsFlightGravity * (rigidbody.drag + shipPhysicsMass)) / 4) * 2.8f))
-		{
-			shipReachedTerminalVelocity = true;
 		}
 
 		// Apply Gravity
@@ -869,6 +911,127 @@ public class ShipController : MonoBehaviour {
 		shipWobbleAmount = Mathf.Clamp (shipWobbleAmount, 0, 10);
 		
 		shipCurrentWobble = Mathf.Sin (shipWobbleTime * shipWobbleSpeed) * shipWobbleAmount;
+	}
+
+	void ShipMagStrip()
+	{
+		//Pitching not allowed
+		currentPitch = Mathf.Lerp(currentPitch, 0, Time.fixedDeltaTime * 5);
+		
+		// Reset Grounded Bool
+		isGrounded = false;
+		
+		// Update Raycast positions
+		if (weightDist > 0)
+		{
+			RaycastFrontPos = transform.TransformPoint(0,0, RaycastOffset + weightDist);
+		} else 
+		{
+			RaycastFrontPos = transform.TransformPoint(0,0, RaycastOffset);
+		}
+		if (weightDist < 0)
+		{
+			RaycastBackPos = transform.TransformPoint(0,0, -(RaycastOffset + weightDist));
+		} else 
+		{
+			RaycastBackPos = transform.TransformPoint(0,0, -RaycastOffset);
+		}
+		
+		// First raycast
+		RaycastHit frontHit;
+		if (Physics.Raycast(RaycastFrontPos, -transform.up, out frontHit))
+		{
+			RaycastFrontDistance = frontHit.distance;
+			if (frontHit.distance < shipAntiGravRideHeight)
+			{
+				isGrounded = true;
+				
+				// Detect if on Magstrip
+				if (frontHit.collider.gameObject.layer != LayerMask.NameToLayer("MagStrip") && (frontHit.collider.gameObject.layer != LayerMask.NameToLayer("Track_Wall") || frontHit.collider.gameObject.layer != LayerMask.NameToLayer("Speed")))
+				{
+					onMagStrip = false;
+				}
+				
+				shipFrontHoverDamping = Mathf.Lerp(shipFrontHoverDamping, 10, Time.deltaTime * shipAntiGravLandingRebound);
+				shipAnglePitchHelp = 0;
+				rigidbody.angularDrag = 0.01f;
+
+				
+				// Rotate to track normals
+				if (frontHit.collider.gameObject.layer != LayerMask.NameToLayer("Track_Wall"))
+				{
+					//wantedTrackRot = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.Cross(transform.right, frontHit.normal), frontHit.normal), Time.deltaTime * 12);
+					//transform.rotation = Quaternion.Slerp(transform.rotation, wantedTrackRot, Time.deltaTime * 10);
+					
+					wantedTrackRot = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.Cross(transform.right, frontHit.normal), frontHit.normal), Time.deltaTime * 24);
+					transform.rotation = Quaternion.Slerp(transform.rotation, wantedTrackRot, Time.deltaTime * 22);
+				}
+
+				float magStripForceMult = (shipAntiGravRideHeight - frontHit.distance) / shipAntiGravRideHeight;
+				Vector3 magStripForceApp = (transform.up * 10000 * magStripForceMult);
+				rigidbody.AddForce(magStripForceApp);
+				print (magStripForceApp);
+
+				// Complete stop
+				
+				if (RaycastFrontDistance < shipAntiGravRideHeight)
+				{
+					rigidbody.angularVelocity = new Vector3(0, 0, 0);
+				}
+				
+			}
+			
+			// Pads
+			if (frontHit.distance < shipAntiGravRideHeight + 3)
+			{
+				if (frontHit.collider.gameObject.layer == LayerMask.NameToLayer("Speed"))
+				{
+					shipBoostTimer = 3;
+					shipBoostAmount = 500;
+					Audio_BoostPad.GetComponent<AudioSource>().Play();
+				}
+			}
+		}
+		
+		// Apply Gravity
+		rigidbody.AddForce(-transform.up * 500);
+		
+		// Test Turbo
+		
+		if (Input.GetButtonDown("[PAD] Fire") || Input.GetButtonDown("[KB] Fire"))
+		{
+			shipBoostTimer = 7;
+			shipBoostAmount = 800;
+			Audio_Boost.GetComponent<AudioSource>().Play();
+		}
+	}
+
+	void ShipRespawn()
+	{
+		if (canRespawn)
+		{
+			respawnTimer += Time.deltaTime;
+		} else 
+		{
+			respawnTimer = 0;
+		}
+		if (respawnTimer > 0)
+		{
+			if (respawnTimer > respawnLength)
+			{
+				transform.position = respawnPosition;
+				transform.rotation = respawnRotation;
+				shipBoostTimer = 0;
+				shipBoostAmount = 0;
+				shipThrust = 0;
+				shipAccel = 0;
+				rollSuccess = false;
+				rotationForce = 0;
+				rigidbody.velocity = new Vector3(0,0,0);
+				rigidbody.angularVelocity = new Vector3(0,0,0);
+				respawnTimer = 0;
+			}
+		}
 	}
 
 	void ShipTurning()
@@ -975,6 +1138,7 @@ public class ShipController : MonoBehaviour {
 			{
 				shipBankSpeed = Mathf.Lerp(shipBankSpeed, 1.2f, Time.fixedDeltaTime * 5);
 			}
+			shipBankVelocity = Mathf.Lerp (shipBankVelocity, shipBankSpeed, Time.deltaTime * 50);
 		}
 		
 		if (inputSteer < 0)
@@ -995,6 +1159,7 @@ public class ShipController : MonoBehaviour {
 			{
 				shipBankSpeed = Mathf.Lerp(shipBankSpeed, 1.2f, Time.fixedDeltaTime * 5);
 			}
+			shipBankVelocity = Mathf.Lerp (shipBankVelocity, shipBankSpeed, Time.deltaTime * 50);
 		}
 		
 		if (inputSteer == 0)
@@ -1019,11 +1184,11 @@ public class ShipController : MonoBehaviour {
 					shipReturnBankSpeed = Mathf.Lerp(shipReturnBankSpeed, 2.5f, Time.fixedDeltaTime * 3);
 				}
 			}
-			
-			shipCurrentBank = Mathf.Lerp(shipCurrentBank, 0 + ShipActualAirBrakeBankExtra, Time.fixedDeltaTime * shipReturnBankSpeed);
+			shipBankVelocity = Mathf.Lerp (shipBankVelocity, shipReturnBankSpeed , Time.deltaTime * 50);
+			shipCurrentBank = Mathf.Lerp(shipCurrentBank, 0 + ShipActualAirBrakeBankExtra, Time.fixedDeltaTime * shipBankVelocity);
 		} else
 		{
-			shipCurrentBank = Mathf.Lerp(shipCurrentBank, inputSteer * (shipMaxBank + ShipActualAirBrakeBankExtra), Time.deltaTime * shipBankSpeed);
+			shipCurrentBank = Mathf.Lerp(shipCurrentBank, inputSteer * (shipMaxBank + ShipActualAirBrakeBankExtra), Time.deltaTime * shipBankVelocity);
 		}
 
 		// Apply Rotatons

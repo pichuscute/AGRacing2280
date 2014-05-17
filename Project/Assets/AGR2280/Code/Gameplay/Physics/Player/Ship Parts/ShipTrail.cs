@@ -10,6 +10,15 @@ public class ShipTrail : MonoBehaviour {
 	float trailStartSize;
 	float trailEndSize;
 
+	public float trailStartMinSize;
+	public float trailStartBoostSize;
+
+	public float trailEndMinSize;
+	public float trailEndBoostSize;
+
+	public float trailStartBoostSpeed;
+	public float trailEndBoostSpeed;
+
 	void Start () 
 	{
 	
@@ -24,12 +33,12 @@ public class ShipTrail : MonoBehaviour {
 
 		if (targetShip.GetComponent<ShipController>().shipBoostTimer > 0)
 		{
-			trailStartSize = Mathf.Lerp (trailStartSize, 0.4f, Time.deltaTime * 8);
-			trailEndSize = Mathf.Lerp (trailEndSize, 0.8f, Time.deltaTime * 8);
+			trailStartSize = Mathf.Lerp (trailStartSize, trailStartBoostSize, Time.deltaTime * trailStartBoostSpeed);
+			trailEndSize = Mathf.Lerp (trailEndSize, trailEndBoostSize, Time.deltaTime * trailEndBoostSpeed);
 		} else
 		{
-			trailStartSize = Mathf.Lerp (trailStartSize, 0.2f, Time.deltaTime);
-			trailEndSize = Mathf.Lerp (trailEndSize, 0.2f, Time.deltaTime);
+			trailStartSize = Mathf.Lerp (trailStartSize, trailStartMinSize, Time.deltaTime);
+			trailEndSize = Mathf.Lerp (trailEndSize,  trailEndMinSize, Time.deltaTime);
 		}
 
 		// Apply Properties
