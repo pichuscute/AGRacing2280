@@ -769,7 +769,7 @@ public class ShipController : MonoBehaviour {
 				{
 					// Double the rotation speed
 					wantedTrackRot = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.Cross(transform.right, frontHit.normal), frontHit.normal), Time.deltaTime * hoverRotToSpeed);
-					transform.RotateAround(RaycastFrontPos, transform.right, wantedTrackRot.w);
+					transform.RotateAround(RaycastFrontPos, transform.TransformDirection(Vector3.right), wantedTrackRot.w);
 				}
 
 				rigidbody.AddForceAtPosition(new Vector3(0, shipFrontHover, 0), RaycastFrontPos);
