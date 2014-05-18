@@ -1127,14 +1127,13 @@ public class ShipController : MonoBehaviour {
 			}
 
 			// Apply airbrake drag
+			Vector3 airbrakeForceAxis = transform.TransformDirection(Vector3.left);
 			if (isGrounded)
 			{
-				//rigidbody.AddForceAtPosition(transform.right * inputAirbrake * (shipAirBrakeVelocityAmount * shipAirbrakeDrag), transform.transform.TransformPoint(0,0, -200));
-				//transform.RotateAround(RaycastFrontPos, Vector3.up, (airBrakeForce / 65));
+				rigidbody.AddForceAtPosition(airbrakeForceAxis  * airBrakeForce * (shipAirBrakeVelocityAmount * shipAirbrakeDrag), RaycastBackPos);
 			} else 
 			{
-				//rigidbody.AddForceAtPosition(transform.right * inputAirbrake * ((shipAirBrakeVelocityAmount * shipAirbrakeDrag * 2)), transform.transform.TransformPoint(0,0, -200));
-				//transform.RotateAround(RaycastFrontPos, Vector3.up, ((airBrakeForce * 1.4f / 65)));
+				rigidbody.AddForceAtPosition(airbrakeForceAxis  * airBrakeForce * ((shipAirBrakeVelocityAmount * shipAirbrakeDrag * 4)), RaycastBackPos);
 			}
 
 		} else
