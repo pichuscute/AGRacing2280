@@ -8,6 +8,9 @@ public class TEEditing : MonoBehaviour {
 
 	bool toolBoxActive = true;
 	float toolBoxWidth;
+	float toolBoxBottomWidth;
+
+	bool toolBoxBottom;
 	
 	void Start () 
 	{
@@ -19,9 +22,17 @@ public class TEEditing : MonoBehaviour {
 	{
 		if (toolBoxActive)
 		{
+			if (toolBoxBottom)
+			{
+				toolBoxBottomWidth = Mathf.Lerp(toolBoxBottomWidth, 0.8f, Time.deltaTime * 8);
+			} else
+			{
+				toolBoxBottomWidth = Mathf.Lerp(toolBoxBottomWidth, 0.13f, Time.deltaTime * 8);
+			}
 			toolBoxWidth = Mathf.Lerp(toolBoxWidth, 0.1f, Time.deltaTime * 8);
 		} else
 		{
+			toolBoxBottomWidth = Mathf.Lerp(toolBoxBottomWidth, 0, Time.deltaTime * 8);
 			toolBoxWidth = Mathf.Lerp(toolBoxWidth, 0f, Time.deltaTime * 8);
 		}
 	}
@@ -34,10 +45,22 @@ public class TEEditing : MonoBehaviour {
 		// Draw Toolbox
 		GUI.skin = skin;
 
-		// Toolbox Tab
-		GUI.Box(new Rect(0, 0, SW * toolBoxWidth + 24, SH), "", skin.customStyles[0]);
 
-		toolBoxActive = GUI.Toggle(new Rect(SW * toolBoxWidth, 0, SW * toolBoxWidth + 24, SH), toolBoxActive, "", skin.toggle);
+		// Bottom Panel
+		
+		GUI.Box(new Rect(0, SH * 0.87f, SW * toolBoxBottomWidth + 12, SH), "", skin.customStyles[0]);
+		toolBoxBottom = GUI.Toggle(new Rect(SW * toolBoxBottomWidth, SH * 0.6f, SW * toolBoxBottomWidth + 12, SH), toolBoxBottom, "", skin.toggle);
+
+		GUI.BeginGroup(new Rect(0,SH * 0.2f, SW * toolBoxBottomWidth, SH));
+
+		GUI.Box(new Rect(0,SH * 0.68f, SW * 0.8f, SH), "");
+		
+		GUI.EndGroup();
+
+		// Toolbox Tab
+		GUI.Box(new Rect(0, 0, SW * toolBoxWidth + 12, SH), "", skin.customStyles[0]);
+
+		toolBoxActive = GUI.Toggle(new Rect(SW * toolBoxWidth, 0, SW * toolBoxWidth + 12, SH), toolBoxActive, "", skin.toggle);
 		GUI.BeginGroup(new Rect(0,0, SW * toolBoxWidth, SH));
 	
 		GUI.Box(new Rect(0,0, SW * 0.1f, SH), "");
@@ -45,11 +68,13 @@ public class TEEditing : MonoBehaviour {
 		GUI.Label(new Rect(SW * 0.1f / 2 - 50, SH * 0.002f, 100, 100), "Toolbox", titleText);
 
 		// Reset Camera Position
-		if (GUI.Button(new Rect(SW * 0.1f / 2 - 50, SH * 0.05f, 100,30), "Reset Camera", skin.button))
+		if (GUI.Button(new Rect(SW * 0.1f / 2 - 50, SH * 0.05f, 100,30), "Bottom bar", skin.button))
 		{
-			transform.position = new Vector3(0,15,0);
+
 		}
 
 		GUI.EndGroup();
+
+
 	}
 }
