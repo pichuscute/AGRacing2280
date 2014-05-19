@@ -37,6 +37,9 @@ public class ShipChaseCam : MonoBehaviour {
 	float xLocalDistance;
 
 	float xLocalLength;
+
+	float shipTurningCalc;
+	float lookAtHeightMove;
 	
 	void Update () 
 	{
@@ -87,7 +90,7 @@ public class ShipChaseCam : MonoBehaviour {
 			currentCameraLookAtHeight = targetShip.GetComponent<ShipController>().cameraCloseLookAtHeight;
 			currentCameraLookAtLength = targetShip.GetComponent<ShipController>().cameraCloseLookAtLength;
 			currentCameraSpring = targetShip.GetComponent<ShipController>().cameraCloseSpring;
-			cameraBaseLookSpring = 24;
+			cameraBaseLookSpring = 12;
 		}
 		if (currentCameraMode == 1)
 		{
@@ -164,13 +167,13 @@ public class ShipChaseCam : MonoBehaviour {
 		}
 
 		// Work out the amount of spring we want
-	
+		shipTurningCalc = Mathf.Lerp(shipTurningCalc, targetShipCurrentRot, Time.deltaTime * currentCameraSpring / 6);
 
 		if (targetShipCurrentRot > tightCameraLimit || isAB)
 		{
 			cameraSpringNormalVelocity = 4;
 			cameraSpringAirbrakeVelocity = Mathf.Lerp (cameraSpringAirbrakeVelocity, 2, Time.deltaTime);
-			currentCameraWantedCalculatedSpring = (currentCameraSpring + (xLocalDistance * targetShipCurrentRot)) - (targetShipCurrentRot * 3);
+			currentCameraWantedCalculatedSpring = (currentCameraSpring + (xLocalDistance * shipTurningCalc)) - (shipTurningCalc * 3);
 			calculatedLocalX = Mathf.Lerp(calculatedLocalX, xLocalDistance, Time.deltaTime * (currentCameraSpring / (targetShip.GetComponent<ShipController>().shipAirbrakeTurn * 100)));
 			currentCameraCalculatedSpring = Mathf.Lerp(currentCameraCalculatedSpring, currentCameraWantedCalculatedSpring, Time.deltaTime * cameraSpringAirbrakeVelocity);
 
@@ -179,14 +182,13 @@ public class ShipChaseCam : MonoBehaviour {
 		{
 			cameraSpringAirbrakeVelocity = 0;
 			cameraSpringNormalVelocity = Mathf.Lerp (cameraSpringNormalVelocity , 2, Time.deltaTime);
-			currentCameraWantedCalculatedSpring = (currentCameraSpring + (xLocalDistance * targetShipCurrentRot)  * currentCameraSpring) - (targetShipCurrentRot * 3);
+			currentCameraWantedCalculatedSpring = (currentCameraSpring + (xLocalDistance * shipTurningCalc)  * currentCameraSpring) - (shipTurningCalc * 3);
 			calculatedLocalX = Mathf.Lerp(calculatedLocalX, xLocalDistance, Time.deltaTime * (currentCameraSpring / 200));
 			currentCameraCalculatedSpring = Mathf.Lerp(currentCameraCalculatedSpring, currentCameraWantedCalculatedSpring, Time.deltaTime / cameraSpringNormalVelocity);
 
 			xLocalLength = Mathf.Lerp(xLocalLength, 0, Time.deltaTime * 5);
 		}
 
-		print (currentCameraCalculatedSpring);
 		// Distance
 		currentCameraInterpolatedLength = currentCameraLength - targetShip.transform.InverseTransformDirection(targetShip.rigidbody.velocity).z / (currentCameraCalculatedSpring / (Time.deltaTime * (currentCameraCalculatedSpring - 2.2f))) - xLocalLength;
 
@@ -227,22 +229,28 @@ public class ShipChaseCam : MonoBehaviour {
 		}
 
 		Vector3 lookAtPosition = targetShip.transform.TransformPoint(0, currentCameraLookAtHeight, currentCameraLookAtLength + cameraMoveLength);
-		Quaternion WantedRot = Quaternion.LookRotation(lookAtPosition - transform.position);
-		
-		
+
+		float lookAtHeightMoveVel = targetShip.rigidbody.velocity.y;
+		if (lookAtHeightMoveVel != 0)
+		{
+			lookAtHeightMoveVel /= currentCameraSpring;
+		}
+		if (lookAtHeightMoveVel < 0)
+		{
+			lookAtHeightMoveVel = -lookAtHeightMoveVel;
+		}
+
+		lookAtHeightMove = Mathf.Lerp (lookAtHeightMove, lookAtPosition.y, Time.deltaTime * (currentCameraSpring + lookAtHeightMoveVel));
+
+
+		Quaternion WantedRot = Quaternion.LookRotation(new Vector3(lookAtPosition.x, lookAtHeightMove, lookAtPosition.z) - transform.position);
+
 		float lerpAdd = targetShip.GetComponent<ShipController>().rotationForce * 4;
 		if (lerpAdd < 0)
 		{
 			lerpAdd = -lerpAdd;
 		}
-
-		if (currentCameraMode == 0)
-		{
-			transform.rotation = Quaternion.Lerp(Quaternion.Euler(transform.eulerAngles.x, WantedRot.eulerAngles.y, targetShip.transform.eulerAngles.z + targetShip.GetComponent<ShipController>().shipCurrentWobble), Quaternion.Euler(WantedRot.eulerAngles.x, WantedRot.eulerAngles.y, targetShip.transform.eulerAngles.z + targetShip.GetComponent<ShipController>().shipCurrentWobble), Time.deltaTime * (cameraBaseLookSpring + lerpAdd));
-		} else 
-		{
-			transform.rotation = Quaternion.Lerp(Quaternion.Euler(transform.eulerAngles.x, WantedRot.eulerAngles.y, targetShip.transform.eulerAngles.z + targetShip.GetComponent<ShipController>().shipCurrentWobble), Quaternion.Euler(WantedRot.eulerAngles.x, WantedRot.eulerAngles.y, targetShip.transform.eulerAngles.z + targetShip.GetComponent<ShipController>().shipCurrentWobble), Time.deltaTime * ((cameraBaseLookSpring / 3) + lerpAdd));
-		}
+		transform.rotation = Quaternion.Euler(WantedRot.eulerAngles.x, WantedRot.eulerAngles.y, targetShip.transform.eulerAngles.z + targetShip.GetComponent<ShipController>().shipCurrentWobble);
 
 	}
 

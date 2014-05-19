@@ -773,7 +773,6 @@ public class ShipController : MonoBehaviour {
 				}
 
 				rigidbody.AddForceAtPosition(new Vector3(0, shipFrontHover, 0), RaycastFrontPos);
-				print (restoreForce.y);
 
 				// Complete stop
 				
@@ -902,7 +901,7 @@ public class ShipController : MonoBehaviour {
 			if (frontHit.distance > shipAntiGravRideHeight + shipAntiGravReboundJumpTime)
 			{
 				isAR = true;
-				shipFallingSlowdown = Mathf.Lerp( shipFallingSlowdown, 1.5f, Time.deltaTime * 8);
+				shipFallingSlowdown = Mathf.Lerp( shipFallingSlowdown, 1.5f, Time.deltaTime * 3);
 				shipGravity = Mathf.Lerp(shipGravity, shipPhysicsFlightGravity * (rigidbody.drag + shipPhysicsMass), Time.deltaTime * shipFallingSlowdown);
 
 				// Terminal Velocity Check
@@ -1001,8 +1000,6 @@ public class ShipController : MonoBehaviour {
 				float magStripForceMult = (shipAntiGravRideHeight - frontHit.distance) / shipAntiGravRideHeight;
 				Vector3 magStripForceApp = (transform.up * 10000 * magStripForceMult);
 				rigidbody.AddForce(magStripForceApp);
-				print (magStripForceApp);
-
 				// Complete stop
 				
 				if (RaycastFrontDistance < shipAntiGravRideHeight)
