@@ -26,12 +26,23 @@ public class TECamera : MonoBehaviour {
 	
 	}
 
-	void Update () 
+	void Update()
 	{
 		GetInput();
+	}
+
+	void FixedUpdate () 
+	{
+
 		if (mbtnMoveCam)
 		{
 			CameraMove();
+
+			// Cursor
+			Screen.lockCursor = true;
+		} else 
+		{
+			Screen.lockCursor = false;
 		}
 	}
 
