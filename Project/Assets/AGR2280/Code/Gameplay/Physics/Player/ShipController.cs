@@ -718,7 +718,7 @@ public class ShipController : MonoBehaviour {
 
 		// First raycast
 		RaycastHit frontHit;
-		if (Physics.Raycast(RaycastFrontPos, -Vector3.up, out frontHit))
+		if (Physics.Raycast(transform.TransformPoint(0,0, RaycastOffset), -Vector3.up, out frontHit))
 		{
 			canRespawn = false;
 			RaycastFrontDistance = frontHit.distance;
@@ -776,7 +776,7 @@ public class ShipController : MonoBehaviour {
 					transform.RotateAround(RaycastFrontPos, transform.TransformDirection(Vector3.right), wantedTrackRot.w);
 				}
 
-				rigidbody.AddForceAtPosition(new Vector3(0, shipFrontHover, 0), RaycastFrontPos);
+				rigidbody.AddForceAtPosition(new Vector3(0, shipFrontHover, 0), transform.TransformPoint(0,0, RaycastOffset));
 
 				// Complete stop
 				
@@ -852,7 +852,7 @@ public class ShipController : MonoBehaviour {
 		}
 
 		RaycastHit backHit;
-		if (Physics.Raycast(RaycastBackPos, -Vector3.up, out backHit))
+		if (Physics.Raycast(transform.TransformPoint(0,0, -RaycastOffset), -Vector3.up, out backHit))
 		{
 			backGravity = 0;
 			RaycastFrontDistance = backHit.distance;
@@ -885,7 +885,7 @@ public class ShipController : MonoBehaviour {
 				shipBackHover = -restoreForce.y;
 				shipBackHover -= damper;
 
-				rigidbody.AddForceAtPosition(new Vector3(0, shipBackHover, 0), RaycastBackPos);
+				rigidbody.AddForceAtPosition(new Vector3(0, shipBackHover, 0), transform.TransformPoint(0,0, -RaycastOffset));
 			} else 
 			{
 				shipBackHoverDamping = 0;
@@ -1134,7 +1134,7 @@ public class ShipController : MonoBehaviour {
 				rigidbody.AddForceAtPosition(airbrakeForceAxis  * airBrakeForce * (shipAirBrakeVelocityAmount * shipAirbrakeDrag), RaycastBackPos);
 			} else 
 			{
-				rigidbody.AddForceAtPosition(airbrakeForceAxis  * airBrakeForce * ((shipAirBrakeVelocityAmount * shipAirbrakeDrag * 4)), RaycastBackPos);
+				rigidbody.AddForceAtPosition(airbrakeForceAxis  * airBrakeForce * ((shipAirBrakeVelocityAmount * shipAirbrakeDrag * 12)), RaycastBackPos);
 			}
 
 		} else
@@ -1144,7 +1144,7 @@ public class ShipController : MonoBehaviour {
 			shipAirbrakeTurningSpring = 0;
 			ShipActualAirBrakeBankExtra = 0;
 			shipAirbrakeFalloffVelocity = Mathf.Lerp(shipAirbrakeFalloffVelocity, 10, Time.deltaTime * 3);
-			shipAirbrakeFalloffSpring = Mathf.Lerp(shipAirbrakeFalloffVelocity, shipAirbrakeFalloff / 10, Time.deltaTime * shipAirbrakeFalloffVelocity);
+			shipAirbrakeFalloffSpring = Mathf.Lerp(shipAirbrakeFalloffVelocity, shipAirbrakeFalloff / 5, Time.deltaTime * shipAirbrakeFalloffVelocity);
 			airBrakeForce = Mathf.Lerp(airBrakeForce, 0, Time.deltaTime * shipAirbrakeFalloffSpring);
 
 		}
