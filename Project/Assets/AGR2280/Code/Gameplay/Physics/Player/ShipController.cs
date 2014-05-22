@@ -402,6 +402,10 @@ public class ShipController : MonoBehaviour {
 	Quaternion respawnRotation;
 	bool canRespawn;
 
+	// Collision
+	public bool shipIsColliding;
+	Vector3 shipCollisionSpeed;
+
 	void Start () 
 	{
 		// Create Camera
@@ -901,7 +905,7 @@ public class ShipController : MonoBehaviour {
 			if (frontHit.distance > shipAntiGravRideHeight + shipAntiGravReboundJumpTime)
 			{
 				isAR = true;
-				shipFallingSlowdown = Mathf.Lerp( shipFallingSlowdown, 1.5f, Time.deltaTime * 3);
+				shipFallingSlowdown = Mathf.Lerp( shipFallingSlowdown, 1.5f, Time.deltaTime * 5);
 				shipGravity = Mathf.Lerp(shipGravity, shipPhysicsFlightGravity * (rigidbody.drag + shipPhysicsMass), Time.deltaTime * shipFallingSlowdown);
 
 				// Terminal Velocity Check
@@ -1429,6 +1433,16 @@ public class ShipController : MonoBehaviour {
 			EngineLight.GetComponent<Light>().intensity = Mathf.Lerp(EngineLight.GetComponent<Light>().intensity,1, Time.deltaTime * 5);
 		}
 
+		// Collision
+		if (shipIsColliding)
+		{
+			rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+		} else 
+		{
+			shipCollisionSpeed = transform.InverseTransformDirection(rigidbody.velocity);
+			rigidbody.constraints = RigidbodyConstraints.FreezeRotationY;
+		}
+
 	}
 
 	void BarrelRoll()
@@ -1565,6 +1579,7 @@ public class ShipController : MonoBehaviour {
 
 		ScrapeParticles.GetComponent<ParticleSystem>().enableEmission = true;
 		ScrapeParticles.transform.position = other.contacts[0].point;
+		shipIsColliding = true;
 
 	}
 
@@ -1572,13 +1587,86 @@ public class ShipController : MonoBehaviour {
 	{
 		ScrapeParticles.transform.position = other.contacts[0].point;
 		ScrapeParticles.transform.rotation = Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y + 180, transform.eulerAngles.z);
+
+		// Collision
+		if (other.collider.gameObject.layer == LayerMask.NameToLayer("Track_Wall"))
+		{
+			float contactNum = other.contacts.Length;
+			contactNum = Mathf.Clamp(contactNum, 0, 1);
+
+			for (int i = 0; i < contactNum; i ++)
+			{
+				rigidbody.angularVelocity = new Vector3(0,0,0);
+				Vector3 collisionSpeed = rigidbody.GetPointVelocity(other.contacts[i].point);
+				Vector3 collisionNormal = transform.InverseTransformDirection((transform.position - other.contacts[i].point).normalized);
+
+				if (shipAccel > shipEngineAccelCap / 2)
+				{
+					shipAccel -= shipEngineGain / 100;
+				}
+
+				if (shipThrust > (shipEngineAccelCap * (rigidbody.drag * 2)))
+				{
+					shipThrust -= Mathf.Abs(collisionSpeed.x + collisionSpeed.z) / (Time.deltaTime * 200);
+				}
+
+				if (collisionNormal.x < 0.3f)
+				{
+					float tempVelZ = transform.InverseTransformDirection(rigidbody.velocity).z;
+					//rigidbody.velocity = new Vector3(0,0,0);
+
+					//shipAccel = 0;
+					//shipThrust = 0;
+					//shipBoostTimer = 0;
+					//shipBoostAmount = 0;
+
+					//rigidbody.AddRelativeForce(new Vector3(0,0, collisionSpeed.z / 10), ForceMode.Impulse);
+				}
+
+				if (collisionNormal.x < 0.5f || collisionNormal.x > -0.5f)
+				{
+					if (collisionNormal.x < 0.1f || collisionNormal.x > -0.1f)
+					{
+						transform.Rotate(Vector3.up * collisionNormal.x * (transform.InverseTransformDirection(rigidbody.velocity).z) / 230);
+					} else
+					{
+						transform.Rotate(Vector3.up * collisionNormal.x * (transform.InverseTransformDirection(rigidbody.velocity).z) / 250);
+					}
+
+				}
+
+				if (collisionNormal.x < 0.1f && collisionNormal.x > -0.1f)
+				{
+					float tempvel = collisionSpeed.z * 20;
+					if (tempvel < 0)
+					{
+						tempvel = -tempvel;
+					}
+					tempvel = Mathf.Clamp(tempvel, 0, 100);
+
+					shipBoostTimer = 0;
+					shipThrust = 0;
+					shipThrust = 0;
+					rigidbody.velocity = new Vector3(0,0,0);
+
+					if (tempvel > 15)
+					{
+						Audio_FloorHit.GetComponent<AudioSource>().Play();
+
+						rigidbody.AddRelativeForce(new Vector3(0,0, -tempvel), ForceMode.Impulse);
+					}
+				}
+
+			}
+		}
+
 	}
 
 	void OnCollisionExit()
 	{
 		Audio_WallScrape.GetComponent<AudioSource>().Stop();
 		ScrapeParticles.GetComponent<ParticleSystem>().enableEmission = false;
-
+		shipIsColliding = false;
 	}
 
 	void SetupValues()

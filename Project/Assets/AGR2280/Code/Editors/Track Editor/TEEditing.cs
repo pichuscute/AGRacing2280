@@ -11,7 +11,11 @@ public class TEEditing : MonoBehaviour {
 	float toolBoxBottomWidth;
 
 	bool toolBoxBottom;
-	
+
+	public Vector2[] baseTrackLeftShape;
+	public Vector2[] baseTrackRightShape;
+	public bool drawTrackShape;
+
 	void Start () 
 	{
 	
@@ -68,13 +72,64 @@ public class TEEditing : MonoBehaviour {
 		GUI.Label(new Rect(SW * 0.1f / 2 - 50, SH * 0.002f, 100, 100), "Toolbox", titleText);
 
 		// Reset Camera Position
-		if (GUI.Button(new Rect(SW * 0.1f / 2 - 50, SH * 0.05f, 100,30), "Bottom bar", skin.button))
+		if (GUI.Button(new Rect(SW * 0.1f / 2 - 50, SH * 0.1f, 100,30), "Load Track", skin.button))
 		{
 
+		}
+
+		if (GUI.Button(new Rect(SW * 0.1f / 2 - 50, SH * 0.2f, 100,30), "Save Track", skin.button))
+		{
+			
 		}
 
 		GUI.EndGroup();
 
 
+	}
+
+	void OnDrawGizmosSelected() 
+	{
+		if (drawTrackShape)
+		{
+			for (int i = 0; i < baseTrackLeftShape.Length; i++)
+			{
+				Gizmos.color = Color.blue;
+
+				Vector3 drawPos = new Vector3(-baseTrackLeftShape[i].x, baseTrackLeftShape[i].y, 0);
+
+				Vector3 lastDraw;
+				if (i > 0)
+				{
+					lastDraw = new Vector3(-baseTrackLeftShape[i - 1].x, baseTrackLeftShape[i - 1].y, 0);
+					Gizmos.DrawLine(lastDraw, drawPos);
+				}
+
+
+				Gizmos.DrawLine(new Vector3(0,0,0), new Vector3(-baseTrackLeftShape[0].x, baseTrackLeftShape[0].y, 0));
+				Gizmos.DrawSphere(new Vector3(0,0,0), 1);
+
+				Gizmos.DrawSphere(drawPos, 1);
+			}
+			
+			for (int i = 0; i < baseTrackRightShape.Length; i++)
+			{
+				Gizmos.color = Color.blue;
+				
+				Vector3 drawPos = new Vector3(baseTrackRightShape[i].x, baseTrackRightShape[i].y, 0);
+				
+				Vector3 lastDraw;
+				if (i > 0)
+				{
+					lastDraw = new Vector3(baseTrackRightShape[i - 1].x, baseTrackRightShape[i - 1].y, 0);
+					Gizmos.DrawLine(lastDraw, drawPos);
+				}
+				
+				
+				Gizmos.DrawLine(new Vector3(0,0,0), new Vector3(baseTrackRightShape[0].x, baseTrackRightShape[0].y, 0));
+				Gizmos.DrawSphere(new Vector3(0,0,0), 1);
+				
+				Gizmos.DrawSphere(drawPos, 1);
+			}
+		}
 	}
 }
