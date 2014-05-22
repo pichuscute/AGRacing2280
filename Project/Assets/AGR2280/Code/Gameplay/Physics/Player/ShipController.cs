@@ -1105,7 +1105,7 @@ public class ShipController : MonoBehaviour {
 
 			if (inputSteer != 0)
 			{
-				shipAirbrakeSteeringSpring = Mathf.Lerp (shipAirbrakeSteeringSpring, 50, Time.deltaTime * (shipAirbrakeDrag / 50));
+				shipAirbrakeSteeringSpring = Mathf.Lerp (shipAirbrakeSteeringSpring, 80, Time.deltaTime * (shipAirbrakeDrag / 120));
 				if (isGrounded)
 				{
 					airBrakeForce = Mathf.Lerp(airBrakeForce, -inputAirbrake * shipAirBrakeVelocityAmount, Time.deltaTime * (shipAirbrakeGain / shipAirbrakeSteeringSpring));
@@ -1143,8 +1143,8 @@ public class ShipController : MonoBehaviour {
 			shipAirbrakeTurningVelocity = 0;
 			shipAirbrakeTurningSpring = 0;
 			ShipActualAirBrakeBankExtra = 0;
-			shipAirbrakeFalloffVelocity = Mathf.Lerp(shipAirbrakeFalloffVelocity, 10, Time.deltaTime * 6);
-			shipAirbrakeFalloffSpring = Mathf.Lerp(shipAirbrakeFalloffVelocity, shipAirbrakeFalloff / 20, Time.deltaTime * shipAirbrakeFalloffVelocity);
+			shipAirbrakeFalloffVelocity = Mathf.Lerp(shipAirbrakeFalloffVelocity, 10, Time.deltaTime * 3);
+			shipAirbrakeFalloffSpring = Mathf.Lerp(shipAirbrakeFalloffVelocity, shipAirbrakeFalloff / 10, Time.deltaTime * shipAirbrakeFalloffVelocity);
 			airBrakeForce = Mathf.Lerp(airBrakeForce, 0, Time.deltaTime * shipAirbrakeFalloffSpring);
 
 		}
