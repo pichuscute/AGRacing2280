@@ -309,6 +309,7 @@ public class ShipController : MonoBehaviour {
 	float shipAirbrakeTurningSpring;
 	float shipAirbrakeTurningVelocity;
 	float shipAirbrakeSteeringSpring;
+	float shipAirbrakeSteeringVelocity;
 	float shipAirBrakeVelocityAmount;
 	float shipRotationGainVelocity;
 	float shipRotationGainSpring;
@@ -398,8 +399,8 @@ public class ShipController : MonoBehaviour {
 	// Respawn
 	float respawnTimer;
 	float respawnLength;
-	Vector3 respawnPosition;
-	Quaternion respawnRotation;
+	public Vector3 respawnPosition;
+	public Quaternion respawnRotation;
 	bool canRespawn;
 
 	// Collision
@@ -435,9 +436,26 @@ public class ShipController : MonoBehaviour {
 
 	void Update()
 	{
+		// Test Autopilot
+		if (Input.GetKeyDown(KeyCode.M))
+		{
+			if (currentController == Controller.Player)
+			{
+				currentController = Controller.AutoPilot;
+			} else if (currentController == Controller.AutoPilot)
+			{
+				currentController = Controller.Player;
+			}
+		}
+
 		if (currentController == Controller.Player)
 		{
 			GetPlayerInput();
+		}
+
+		if (currentController == Controller.AutoPilot)
+		{
+			AutoPilotController();
 		}
 
 		SideShiftInput ();
@@ -564,6 +582,43 @@ public class ShipController : MonoBehaviour {
 				Audio_ABRight.GetComponent<AudioSource>().Play();
 			}
 		}
+	}
+
+	void AutoPilotController()
+	{
+		isThrusting = true;
+
+
+		Vector3 velocity = transform.InverseTransformDirection(rigidbody.velocity);
+		rigidbody.AddRelativeForce(new Vector3(velocity.x * -rigidbody.mass * rigidbody.drag * 1.2f ,0,0) * Time.deltaTime, ForceMode.Impulse);
+
+		float lookRot = Vector3.Angle(transform.forward, GetComponent<RacerInfoReturn>().nextAPObject.position - transform.position);
+		Vector3 nextNodeLocal = transform.InverseTransformPoint(GetComponent<RacerInfoReturn>().nextAPObject.position);
+
+		lookRot *= 0.01f;
+		if (nextNodeLocal.x < 0)
+		{
+			lookRot *= -1;
+		}
+		lookRot += nextNodeLocal.x / 50;
+
+		inputSteer = 0;
+		inputAirbrake = 0;
+
+		inputSteer = Mathf.Clamp(lookRot, -1, 1);
+
+		if (lookRot < -1 || lookRot > 1)
+		{
+			inputAirbrake = -Mathf.Clamp(lookRot, -1, 1);
+		}
+
+
+
+		//rotationForce = 0;
+
+		Debug.DrawLine(transform.position, GetComponent<RacerInfoReturn>().nextAPObject.position, Color.red );
+		transform.Rotate(Vector3.up * lookRot);
+		//transform.rotation = Quaternion.Euler(transform.eulerAngles.x, Mathf.LerpAngle(transform.eulerAngles.y, lookRot, Time.deltaTime * 12), transform.eulerAngles.z);
 	}
 
 	void SideShiftInput()
@@ -759,7 +814,14 @@ public class ShipController : MonoBehaviour {
 				float hoverForce = hoverDistance - frontHit.distance;
 				
 				float springCost = hoverForce * shipBaseHover;
-				Vector3 spring = RaycastFrontPos - frontHit.point;
+
+				
+				if (RaycastFrontDistance < shipAntiGravRideHeight / 2)
+				{
+					springCost 	= hoverForce * (shipBaseHover) * 1.5f;
+				}
+
+				Vector3 spring = transform.TransformPoint(0,0, RaycastOffset) - frontHit.point;
 				float length = spring.magnitude;
 				float displacement = length - (shipAntiGravRideHeight);
 				
@@ -872,7 +934,7 @@ public class ShipController : MonoBehaviour {
 				float hoverForce = hoverDistance - backHit.distance;
 
 				float springCost = hoverForce * shipBaseHover;
-				Vector3 spring = RaycastBackPos - backHit.point;
+				Vector3 spring = transform.TransformPoint(0,0, -RaycastOffset) - backHit.point;
 				float length = spring.magnitude;
 				float displacement = length - (shipAntiGravRideHeight);
 				
@@ -897,7 +959,7 @@ public class ShipController : MonoBehaviour {
 
 		if (isGrounded)
 		{
-			shipGravity = shipPhysicsTrackGravity;
+			shipGravity = Mathf.Lerp (shipGravity, shipPhysicsTrackGravity, Time.deltaTime * 100);
 			shipFallingSlowdown = 0;
 			backGravity = 0;
 		} else 
@@ -905,7 +967,7 @@ public class ShipController : MonoBehaviour {
 			if (frontHit.distance > shipAntiGravRideHeight + shipAntiGravReboundJumpTime)
 			{
 				isAR = true;
-				shipFallingSlowdown = Mathf.Lerp( shipFallingSlowdown, 1.5f, Time.deltaTime * 5);
+				shipFallingSlowdown = Mathf.Lerp( shipFallingSlowdown, 2, Time.deltaTime * 5);
 				shipGravity = Mathf.Lerp(shipGravity, shipPhysicsFlightGravity * (rigidbody.drag + shipPhysicsMass), Time.deltaTime * shipFallingSlowdown);
 
 				// Terminal Velocity Check
@@ -915,8 +977,17 @@ public class ShipController : MonoBehaviour {
 				}
 			} else 
 			{
-				shipFallingSlowdown = Mathf.Lerp( shipFallingSlowdown, shipAntiGravRebound, Time.deltaTime * shipPhysicsNormalGravity);
-				shipGravity = Mathf.Lerp(shipGravity, shipPhysicsTrackGravity * (rigidbody.drag + shipPhysicsMass), Time.deltaTime * shipFallingSlowdown);
+				if (shipGravity > shipPhysicsTrackGravity * (shipPhysicsFlightGravity / rigidbody.drag) / rigidbody.drag)
+				{
+					shipGravity = shipPhysicsTrackGravity * (shipPhysicsFlightGravity / rigidbody.drag) / rigidbody.drag;
+				}
+
+				if (frontHit.distance > shipAntiGravRideHeight + (shipAntiGravReboundJumpTime / 2) && isAR)
+				{
+					shipGravity = shipPhysicsTrackGravity * (shipPhysicsFlightGravity / rigidbody.drag) / rigidbody.drag;
+				}
+				shipFallingSlowdown = Mathf.Lerp( shipFallingSlowdown, shipAntiGravRebound * 10, Time.deltaTime * shipAntiGravLandingRebound);
+				shipGravity = Mathf.Lerp(shipGravity, shipPhysicsTrackGravity * (shipPhysicsFlightGravity / rigidbody.drag) / rigidbody.drag, Time.deltaTime * shipFallingSlowdown);
 			}
 			backGravity = Mathf.Lerp(backGravity, shipGravity / 10, Time.deltaTime * shipPhysicsNormalGravity * 10);
 
@@ -1073,7 +1144,8 @@ public class ShipController : MonoBehaviour {
 		if (inputSteer != 0)
 		{
 			shipRotationFalloffSpring = 300;
-			shipRotationGainSpring = Mathf.Lerp(shipRotationGainSpring, 130, Time.deltaTime * (shipTurnGain / 80));
+			shipRotationGainVelocity = Mathf.Lerp(shipRotationGainVelocity, 1, Time.deltaTime * (shipTurnGain / 30));
+			shipRotationGainSpring = Mathf.Lerp(shipRotationGainSpring, 130, Time.deltaTime * (shipTurnGain / shipRotationGainVelocity));
 			if (isGrounded)
 			{
 				normalForce = Mathf.Lerp(normalForce, inputSteer * shipTurnMax, Time.deltaTime * (shipTurnGain / shipRotationGainSpring));
@@ -1084,11 +1156,13 @@ public class ShipController : MonoBehaviour {
 
 		} else 
 		{
-			shipRotationGainSpring = 400;
+			shipRotationGainSpring = shipTurnGain;
+			shipRotationGainVelocity = shipTurnGain;
 			shipRotationFalloffSpring = Mathf.Lerp(shipRotationFalloffSpring, 50 , Time.deltaTime * (shipTurnFalloff / 200));
 			//normalForce = Mathf.Lerp(normalForce, 0, Time.deltaTime * shipRotationFalloffVelocity);
 			normalForce = Mathf.Lerp(normalForce, 0, Time.deltaTime * (shipTurnFalloff / shipRotationFalloffSpring));
 		}
+
 		if (inputAirbrake != 0)
 		{
 			shipAirbrakeFalloffVelocity = 0;
@@ -1105,7 +1179,8 @@ public class ShipController : MonoBehaviour {
 
 			if (inputSteer != 0)
 			{
-				shipAirbrakeSteeringSpring = Mathf.Lerp (shipAirbrakeSteeringSpring, 80, Time.deltaTime * (shipAirbrakeDrag / 120));
+				shipAirbrakeSteeringVelocity = Mathf.Lerp (shipAirbrakeSteeringVelocity, 130, Time.deltaTime * (shipAirbrakeGain / 8));
+				shipAirbrakeSteeringSpring = Mathf.Lerp (shipAirbrakeSteeringSpring, 80, Time.deltaTime * (shipAirbrakeDrag / shipAirbrakeSteeringVelocity));
 				if (isGrounded)
 				{
 					airBrakeForce = Mathf.Lerp(airBrakeForce, -inputAirbrake * shipAirBrakeVelocityAmount, Time.deltaTime * (shipAirbrakeGain / shipAirbrakeSteeringSpring));
@@ -1117,6 +1192,7 @@ public class ShipController : MonoBehaviour {
 			} else 
 			{
 				shipAirbrakeSteeringSpring = 300;
+				shipAirbrakeSteeringVelocity = 300;
 				shipAirbrakeTurningSpring = Mathf.Lerp (shipAirbrakeTurningSpring, (shipAirbrakeGain / 100), Time.deltaTime * (shipAirbrakeGain / 100));
 				if (isGrounded)
 				{
@@ -1143,7 +1219,7 @@ public class ShipController : MonoBehaviour {
 			shipAirbrakeTurningVelocity = 0;
 			shipAirbrakeTurningSpring = 0;
 			ShipActualAirBrakeBankExtra = 0;
-			shipAirbrakeFalloffVelocity = Mathf.Lerp(shipAirbrakeFalloffVelocity, 10, Time.deltaTime * 3);
+			shipAirbrakeFalloffVelocity = Mathf.Lerp(shipAirbrakeFalloffVelocity, 10, Time.deltaTime * 2);
 			shipAirbrakeFalloffSpring = Mathf.Lerp(shipAirbrakeFalloffVelocity, shipAirbrakeFalloff / 5, Time.deltaTime * shipAirbrakeFalloffVelocity);
 			airBrakeForce = Mathf.Lerp(airBrakeForce, 0, Time.deltaTime * shipAirbrakeFalloffSpring);
 
@@ -1838,7 +1914,7 @@ public class ShipController : MonoBehaviour {
 
 		if (thisShip == RaceInformation.ShipTypes.Agility)
 		{
-			shipBaseHover = 100;
+			shipBaseHover = (shipAntiGravRideHeight * 10) * 2;
 			shipGravityHover = 100;
 			stopForce = 1000;
 
@@ -1850,19 +1926,19 @@ public class ShipController : MonoBehaviour {
 
 		if (thisShip == RaceInformation.ShipTypes.Speed)
 		{
-			shipBaseHover = 75;
+			shipBaseHover = shipAntiGravRideHeight * 10;
 			shipGravityHover = 1;
 			stopForce = 800;
 
-			hoverRotToSpeed = 16;
-			hoverRotNowSpeed = 18;
+			hoverRotToSpeed = 18;
+			hoverRotNowSpeed = 16;
 
 			groundAngularDrag = 1;
 		}
 
 		if (thisShip == RaceInformation.ShipTypes.Fighter)
 		{
-			shipBaseHover = 45;
+			shipBaseHover = (shipAntiGravRideHeight * 10) - 10;
 			shipGravityHover = 10;
 			stopForce = 500;
 

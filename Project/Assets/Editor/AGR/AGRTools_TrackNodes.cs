@@ -83,7 +83,7 @@ public class AGRTools_TrackNodes : EditorWindow {
 				}
 			}
 	            // Reset Nodes
-	            if (AGREditorInput.input == KeyCode.R && nodeCount > 2)
+	            if (AGREditorInput.input == KeyCode.R && nodeCount > 0)
 	            {
 	                for (int i = 0; i < nodeCount + 1; i++)
 	                {
@@ -152,41 +152,23 @@ public class AGRTools_TrackNodes : EditorWindow {
 
             if (AGREditorInput.input == KeyCode.Comma)
             {
-                GameObject node = GameObject.Find ("RaceGate_" + nodeCount);
-                if (rotationAxis == rotAxis.x)
-                {
-                    node.transform.Rotate(-Vector3.right * nodeRotationIncrement);
-                }
-
-                if (rotationAxis == rotAxis.y)
-                {
-                    node.transform.Rotate(-Vector3.up * nodeRotationIncrement);
-                }
-
-                if (rotationAxis == rotAxis.z)
-                {
-                    node.transform.Rotate(Vector3.forward * nodeRotationIncrement);
-                }
+                GameObject node = GameObject.Find ("RaceGate_" + (nodeCount - 1));
+                node.transform.Rotate(-Vector3.up * nodeRotationIncrement);
             }
 
             if (AGREditorInput.input == KeyCode.Period)
             {
-                GameObject node = GameObject.Find ("RaceGate_" + nodeCount);
-                if (rotationAxis == rotAxis.x)
-                {
-                    node.transform.Rotate(Vector3.right * nodeRotationIncrement);
-                }
-                
-                if (rotationAxis == rotAxis.y)
-                {
-                    node.transform.Rotate(Vector3.up * nodeRotationIncrement);
-                }
-                
-                if (rotationAxis == rotAxis.z)
-                {
-                    node.transform.Rotate(-Vector3.forward * nodeRotationIncrement);
-                }
+                GameObject node = GameObject.Find ("RaceGate_" + (nodeCount - 1));
+                node.transform.Rotate(Vector3.up * nodeRotationIncrement);
             }
+
+			if (AGREditorInput.input == KeyCode.Slash)
+			{
+				GameObject node = GameObject.Find ("RaceGate_" + (nodeCount - 1));
+				GameObject node2 = GameObject.Find ("RaceGate_" + (nodeCount - 2));
+				node.transform.rotation = node2.transform.rotation;
+			}
+
             // Quick Switch Rotation
             if (AGREditorInput.input == KeyCode.Semicolon)
             {
@@ -262,11 +244,8 @@ public class AGRTools_TrackNodes : EditorWindow {
         // Set last node rot
         if (nodeCount > 0)
         {
-            lastNodeRot = GameObject.Find("RaceGate_" + nodeCount).transform.rotation;
+            //lastNodeRot = GameObject.Find("RaceGate_" + nodeCount).transform.rotation;
         }
-
-		//Increase node count
-		nodeCount++;
 
 		// Check for node counter
 		if (!GameObject.Find ("NodeCount")) 
@@ -282,27 +261,58 @@ public class AGRTools_TrackNodes : EditorWindow {
 		}
 		
 		//Create Node
-		nodeMat = Resources.Load("!Important!/Editor/Nodes/NodeMaterial") as Material;
-        NodeArrow = Resources.Load("AGREditing/NodeArrow") as Object;
 
-		GameObject newNode = GameObject.CreatePrimitive (PrimitiveType.Cube);
-		newNode.transform.position = new Vector3(hitLoc.x, hitLoc.y + (newNode.transform.localScale.y), hitLoc.z);
+		// Load Materials
+		nodeMat = Resources.Load("!Important!/Editor/Nodes/NodeMaterial") as Material;
+		NodeArrow = Resources.Load("AGREditing/NodeArrow") as Object;
+
+		// Create Node
+		GameObject newNode = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		newNode.transform.position = Vector3.zero;
+		newNode.transform.position = new Vector3(hitLoc.x, hitLoc.y + (newNode.transform.localScale.y / 2) + 5.5f, hitLoc.z);
 		newNode.name = "RaceGate_" + nodeCount;
 		newNode.renderer.material = nodeMat;
 		newNode.AddComponent<NodeID>();
-        newNode.AddComponent<RaceGateRender>();
-        newNode.AddComponent<NodeInformation>();
-		newNode.GetComponent<NodeID> ().thisNodeID = nodeCount;
-        newNode.transform.localScale = new Vector3(5, 5, 5);
+		newNode.AddComponent<RaceGateRender>();
+		newNode.AddComponent<NodeInformation>();
+		newNode.GetComponent<NodeInformation>().trackWidth = 85;
+		newNode.GetComponent<NodeID>().thisNodeID = nodeCount;
+		newNode.transform.localScale = new Vector3(85, 50, 3);
 
-        newNode.collider.enabled = false;
-        newNode.layer = LayerMask.NameToLayer("Ignore Raycast");
-        newNode.tag = "Gate";
+		newNode.GetComponent<BoxCollider>().isTrigger = true;
+		newNode.layer = LayerMask.NameToLayer("Ignore Raycast");
+		newNode.tag = "Gate";
 
-        GameObject nodeArrow = Instantiate(NodeArrow) as GameObject;
-        nodeArrow.transform.parent = newNode.transform;
-        nodeArrow.transform.localPosition = new Vector3(0, 1, 0);
-        nodeArrow.transform.localRotation = Quaternion.Euler(0, 90, 0);
-        nodeArrow.AddComponent<RaceGateRender>();
+		GameObject nodeArrow = Instantiate(NodeArrow) as GameObject;
+		nodeArrow.transform.position = Vector3.zero;
+		nodeArrow.transform.parent = newNode.transform;
+		nodeArrow.transform.localPosition = new Vector3(0, 0, 0);
+		nodeArrow.transform.localRotation = Quaternion.Euler(0, 90, 0);
+		nodeArrow.transform.localScale = new Vector3(0.39f, 0.039f, 0.024f);
+		nodeArrow.AddComponent<RaceGateRender>();
+
+		// Create helper locations
+		Material aiPoint = Resources.Load("AGREditing/Materials/GateNode") as Material;
+		GameObject aiHelper = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		aiHelper.AddComponent<RaceGateRender>();
+		aiHelper.transform.position = newNode.transform.position;
+		aiHelper.transform.parent = newNode.transform;
+		aiHelper.name = "thisGateAIHelper";
+		aiHelper.renderer.material = aiPoint;
+		aiHelper.GetComponent<BoxCollider>().enabled = false;
+
+		Material APPoint = Resources.Load("AGREditing/Materials/AGRArrow") as Material;
+		GameObject APHelper = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		APHelper.AddComponent<RaceGateRender>();
+		APHelper.transform.position = newNode.transform.position;
+		APHelper.transform.parent = newNode.transform;
+		APHelper.name = "thisGateAPHelper";
+		APHelper.renderer.material = APPoint;
+		APHelper.GetComponent<BoxCollider>().enabled = false;
+
+		
+		//Increase node count
+		nodeCount++;
+
 	}
 }

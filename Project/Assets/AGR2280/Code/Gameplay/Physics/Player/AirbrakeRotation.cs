@@ -18,7 +18,7 @@ public class AirbrakeRotation : MonoBehaviour {
 
     public airBrakeSide shipAirBrakeSide;
 
-    float airBrakeInput;
+    public float airBrakeInput;
 
     float currentAngle;
 
