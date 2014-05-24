@@ -38,8 +38,8 @@ public class MusicManager : MonoBehaviour {
 		result = FMOD.Factory.System_Create (ref system);
         firstSongStarted = false;
 
-		Target = GameObject.Find ("Plr_ShipController");
-        RaceManager = GameObject.Find("RaceManager");
+		Target = GameObject.Find ("PlayerShip");
+       // RaceManager = GameObject.Find("RaceManager");
 	}
 
 
@@ -51,7 +51,7 @@ public class MusicManager : MonoBehaviour {
             result = channel.isPlaying(ref isMusicPlaying);
         }
 
-		if (RaceManager.GetComponent<RaceMangement>().raceStarted && !isMusicPlaying)
+		if (!isMusicPlaying)
         {
             PlayNewSong();
             
@@ -61,6 +61,7 @@ public class MusicManager : MonoBehaviour {
             HighPass();
         }
 
+		/*
         if (RaceManager.GetComponent<RaceMangement>().gamePaused && firstSongStarted)
         {
             channel.setPaused(true);
@@ -71,11 +72,12 @@ public class MusicManager : MonoBehaviour {
                 channel.setPaused(false);
             }
         }
+        */
 	}
     
 	void HighPass()
 	{
-		if (Target.GetComponent<User_Ship>().publicDistance > Target.GetComponent<User_Ship>().hoverHeight + 5) 
+		if (Target.GetComponent<ShipController>().isAR) 
 		{
 			FilterHP = Mathf.Lerp (FilterHP, 2000, Time.deltaTime * 5);
 		} else {

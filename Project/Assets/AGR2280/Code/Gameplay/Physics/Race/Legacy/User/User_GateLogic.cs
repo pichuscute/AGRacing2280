@@ -39,6 +39,8 @@ public class User_GateLogic : MonoBehaviour {
 
     string trackName = "test";
 
+	bool calculatedLap;
+
 	void Start () 
 	{
 		RaceManager = GameObject.Find ("RaceManager");
