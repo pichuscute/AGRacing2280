@@ -40,21 +40,38 @@ public class ShipChaseCam : MonoBehaviour {
 
 	float shipTurningCalc;
 	float lookAtHeightMove;
+	GameObject RaceController;
+
+	void Start()
+	{
+		RaceController = GameObject.Find("RaceManager");
+	}
 	
 	void Update () 
 	{
-		CameraInputAndUpdate();
-		if (currentCameraMode == 2 || currentCameraMode == 3)
+		if (RaceController.GetComponent<RaceController>().raceProgress != global::RaceController.RaceState.Overview)
 		{
-			InternalCam();
+			CameraInputAndUpdate();
+			if (currentCameraMode == 2 || currentCameraMode == 3)
+			{
+				InternalCam();
+			}
+		} else 
+		{
+			transform.parent = GameObject.Find("TrackOverviewAnim").transform;
+			transform.localPosition = Vector3.zero;
+			transform.localRotation = Quaternion.Euler(0,0,0);
 		}
 	}
 
 	void FixedUpdate()
 	{
-		if (currentCameraMode == 0 || currentCameraMode == 1)
+		if (RaceController.GetComponent<RaceController>().raceProgress != global::RaceController.RaceState.Overview)
 		{
-			ChaseCam();
+			if (currentCameraMode == 0 || currentCameraMode == 1)
+			{
+				ChaseCam();
+			}
 		}
 	}
 

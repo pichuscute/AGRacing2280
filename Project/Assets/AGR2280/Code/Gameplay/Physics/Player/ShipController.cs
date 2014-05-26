@@ -372,6 +372,9 @@ public class ShipController : MonoBehaviour {
 	// Objects
 	GameObject CameraObject;
 	public GameObject ModelGroup;
+	public GameObject ShipModel;
+
+	public GameObject RaceController;
 
 	public GameObject Audio_BoostPad;
 	public GameObject Audio_Boost;
@@ -432,6 +435,8 @@ public class ShipController : MonoBehaviour {
 		respawnPosition = transform.position;
 		respawnRotation = transform.rotation;
 
+		RaceController = GameObject.Find("RaceManager");
+
 	}
 
 	void Update()
@@ -462,19 +467,33 @@ public class ShipController : MonoBehaviour {
 	}
 	void FixedUpdate () 
 	{
-		if (onMagStrip)
+		if (RaceController.GetComponent<RaceController>().raceProgress != global::RaceController.RaceState.Overview && RaceController.GetComponent<RaceController>().raceProgress != global::RaceController.RaceState.Countdown)
 		{
-			ShipMagStrip();
+			if (onMagStrip)
+			{
+				ShipMagStrip();
+			} else 
+			{
+				ShipGravity();
+			}
+			ShipRespawn();
+			ShipTurning();
+			ShipAcceleration();
+			ShipSideShift();
+			BarrelRoll();
+			ShipExtra();
 		} else 
 		{
-			ShipGravity();
+			if (onMagStrip)
+			{
+				ShipMagStrip();
+			} else 
+			{
+				ShipGravity();
+			}
+			ShipExtra();
 		}
-		ShipRespawn();
-		ShipTurning();
-		ShipAcceleration();
-		ShipSideShift();
-		BarrelRoll();
-		ShipExtra();
+
 	}
 
 	void GetPlayerInput()
@@ -1517,6 +1536,23 @@ public class ShipController : MonoBehaviour {
 		{
 			shipCollisionSpeed = transform.InverseTransformDirection(rigidbody.velocity);
 			rigidbody.constraints = RigidbodyConstraints.FreezeRotationY;
+		}
+
+		// Animation
+		if (shipThrust < 250)
+		{
+			if (!ShipModel.GetComponent<Animation>().isPlaying)
+			{
+				ShipModel.GetComponent<Animation>().animation["ShipIdle"].speed = 1;
+				ShipModel.GetComponent<Animation>().Play("ShipIdle");
+			}
+		}
+		else
+		{
+			ShipModel.GetComponent<Animation>().animation["ShipIdle"].time = 0;
+			ShipModel.GetComponent<Animation>().animation.Stop();
+			ShipModel.transform.localPosition = Vector3.Lerp(ShipModel.transform.localPosition, new Vector3(0, 0, 0), Time.fixedDeltaTime * 10);
+			ShipModel.transform.localRotation = Quaternion.Euler(0, 0, 0);
 		}
 
 	}

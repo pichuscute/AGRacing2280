@@ -42,12 +42,14 @@ public class RacerInfoReturn : MonoBehaviour {
 	public int[] lapS;
 	public int[] lapM;
 
-	bool thisRacerFinished;
+	public bool thisRacerFinished;
 
 	float resultsWindowHeight;
 
 	public Texture waterMark;
-	string ResultsTitle = "RESULTS - PRESS S TO SAVE";
+	string ResultsTitle = "RESULTS - PRESS S TO SCREENSHOT";
+
+	GameObject RaceManager;
 
 	void Start () 
 	{
@@ -76,6 +78,8 @@ public class RacerInfoReturn : MonoBehaviour {
 		lapMS = new int[99];
 		lapS = new int[99];
 		lapM = new int[99];
+
+		RaceManager = GameObject.Find("RaceManager");
 	}
 	
 
@@ -209,163 +213,195 @@ public class RacerInfoReturn : MonoBehaviour {
 		{
 			GUI.DrawTexture(new Rect(Screen.width - 128, 0, 128, 128), waterMark);
 		}
-
-		if (isClient && !thisRacerFinished)
+		if (RaceManager.GetComponent<RaceController>().raceProgress != RaceController.RaceState.Overview)
 		{
-
-			Vector2 windowDim = new Vector2(Screen.width, Screen.height);
-
-			// Draw Lap Seconds
-			GUI.Box(new Rect(0, 0, (windowDim.x / 2 ) * 0.2f, (windowDim.y / 2) * 0.08f),"", UISkin);
-
-			string milisecond = thisLapMS.ToString();
-			if (thisLapMS < 10)
+			if (isClient && !thisRacerFinished)
 			{
-				milisecond = ("0" + thisLapMS);
+
+				Vector2 windowDim = new Vector2(Screen.width, Screen.height);
+
+				// Draw Lap Seconds
+				GUI.Box(new Rect(0, 0, (windowDim.x / 2 ) * 0.2f, (windowDim.y / 2) * 0.08f),"", UISkin);
+
+				// Alter font
+				UIFont.fontSize = 18;
+				string milisecond = thisLapMS.ToString();
+				if (thisLapMS < 10)
+				{
+					milisecond = ("0" + thisLapMS);
+				}
+
+				if (thisLapMS > 99)
+				{
+					milisecond = ("99");
+				}
+
+				GUI.Label(new Rect((windowDim.x * 0.01f), windowDim.y * 0.003f, 500, 500), "This: " + milisecond + ":", UIFont);
+
+				string second = thisLapS.ToString();
+				if (thisLapS < 10)
+				{
+					second = ("0" + thisLapS);
+				}
+
+				GUI.Label(new Rect((windowDim.x * 0.05f), windowDim.y * 0.003f, 500, 500), second + ":", UIFont);
+
+				string minute = thisLapM.ToString();
+				if (thisLapM < 10)
+				{
+					minute = ("0" + thisLapM);
+				}
+
+				GUI.Label(new Rect((windowDim.x * 0.065f), windowDim.y * 0.003f, 500, 500), minute, UIFont);
+
+				// Draw Best Lap Seconds
+
+				if (displayBest)
+				{
+					bestBoxHeight = Mathf.Lerp(bestBoxHeight, 0.4f, Time.deltaTime * 0.2f);
+				} else
+				{
+					bestBoxHeight = 0;
+				}
+
+				GUI.BeginGroup(new Rect(0,(windowDim.y / 2) * 0.08f, (windowDim.x / 2 ) * 0.18f, (windowDim.y / 2) * bestBoxHeight));
+					GUI.Box(new Rect(0,0, (windowDim.x / 2 ) * 0.3f, (windowDim.y / 2) * 0.1f),"", UISkin);
+					
+					string Bmilisecond = bestLapMS.ToString();
+					if (bestLapMS < 10)
+					{
+						Bmilisecond = ("0" + bestLapMS);
+					}
+					
+					if (bestLapMS > 99)
+					{
+						Bmilisecond = ("99");
+					}
+					
+					GUI.Label(new Rect((windowDim.x * 0.01f), windowDim.y * 0.01f, 500, 500), "Best: " + Bmilisecond + ":", UIFont);
+					
+					string Bsecond = bestLapS.ToString();
+					if (bestLapS < 10)
+					{
+						Bsecond = ("0" + bestLapS);
+					}
+					
+					GUI.Label(new Rect((windowDim.x * 0.05f), windowDim.y * 0.01f, 500, 500), Bsecond + ":", UIFont);
+					
+					string Bminute = bestLapM.ToString();
+					if (bestLapM < 10)
+					{
+						Bminute = ("0" + bestLapM);
+					}
+					
+					GUI.Label(new Rect((windowDim.x * 0.065f), windowDim.y * 0.01f, 500, 500), Bminute, UIFont);
+				GUI.EndGroup();
 			}
 
-			if (thisLapMS > 99)
+			if (isClient && thisRacerFinished)
 			{
-				milisecond = ("99");
+
+				// Voice
+				if(GameObject.Find("Voice_Completed"))
+				{
+					GameObject.Find("Voice_Completed").GetComponent<AudioSource>().enabled = true;
+				}
+
+				Vector2 windowDim = new Vector2(Screen.width, Screen.height);
+
+				resultsWindowHeight = Mathf.Lerp(resultsWindowHeight, windowDim.y / 2, Time.deltaTime * 2);
+
+				// Draw Results Screen
+
+				GUI.BeginGroup(new Rect(windowDim.x / 4, windowDim.y / 4, windowDim.x / 2, resultsWindowHeight));
+
+				GUI.color = new Color(1,1,1, 0.8f);
+
+				// Main Box
+				Texture2D tempTexture = UISkin.hover.background;
+
+				UISkin.hover.background= null;
+				GUI.Box(new Rect(0, 0, windowDim.x / 2, windowDim.y / 2), "" ,UISkin);
+				//------------
+
+				GUI.color = new Color(1,1,1, 1);
+
+				// Times Box
+				GUI.BeginGroup(new Rect(0, windowDim.y / 12, windowDim.x / 5, windowDim.y / 3));
+					UIFont.fontSize = 24;
+					UIFont.alignment = TextAnchor.MiddleLeft;
+
+					GUI.Box(new Rect(0, 0, windowDim.x / 8, windowDim.y / 3), "" ,UISkin);
+					GUI.Label(new Rect(5, 16, 100,40), "Lap 1 - " + lapMS[1] + ":" + lapS[1] + ":" + lapM[1], UIFont);
+					GUI.Label(new Rect(5, 48, 100,40), "Lap 2 - " + lapMS[2] + ":" + lapS[2] + ":" + lapM[2], UIFont);
+					GUI.Label(new Rect(5, 80, 100,40), "Lap 3 - " + lapMS[3] + ":" + lapS[3] + ":" + lapM[3], UIFont);
+					GUI.Label(new Rect(5, 112, 100,40), "Lap 4 - " + lapMS[4] + ":" + lapS[4] + ":" + lapM[4], UIFont);
+					GUI.Label(new Rect(5, 144, 100,40), "Lap 5 - " + lapMS[5] + ":" + lapS[5] + ":" + lapM[5], UIFont);
+				GUI.EndGroup();
+				//------------
+
+
+
+				// Results Text
+				GUI.color = new Color(1,1,1,1);
+				UIFont.normal.textColor = new Color(0.1f,0.1f,0.1f,1);
+				UIFont.fontSize = 32;
+				UIFont.alignment = TextAnchor.UpperCenter;
+				
+				GUI.Label(new Rect(windowDim.x / 4 - 50, 0, 100, 100),ResultsTitle, UIFont);
+				//------------
+
+				// Buttons
+				GUI.BeginGroup(new Rect(windowDim.x / 4, windowDim.y / 12, windowDim.x / 5, windowDim.y / 3));
+				UISkin.hover.background = tempTexture;
+				UISkin.alignment = TextAnchor.MiddleCenter;
+					if (GUI.Button(new Rect(0,0, 200, 30), "Race Again", UISkin))
+					{
+						if(GameObject.Find("MusicManager"))
+						{
+							GameObject.Find("MusicManager").GetComponent<MusicManager>().StopMusic();
+						}
+						Application.LoadLevel(0);
+					}
+					if (GUI.Button(new Rect(0,40, 200, 30), "Screenshots Folder", UISkin))
+					{
+						string documentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments).ToString();
+						if (!Directory.Exists(documentsFolder + "/AGR2280/Screenshots/"))
+						{
+							Directory.CreateDirectory(documentsFolder + "/AGR2280/Screenshots/");
+						}
+						string path = documentsFolder + "/AGR2280/Screenshots/";
+						System.Diagnostics.Process.Start(path);
+					}
+				GUI.EndGroup();
+				//------------
+
+				GUI.EndGroup();
+
+				// Hotkeys
+				if (Input.GetKeyDown(KeyCode.S))
+				{
+					string documentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments).ToString();
+					if (!Directory.Exists(documentsFolder + "/AGR2280/Screenshots/"))
+					{
+						Directory.CreateDirectory(documentsFolder + "/AGR2280/Screenshots/");
+					}
+					string path = documentsFolder + "/AGR2280/Screenshots/";
+
+					Application.CaptureScreenshot(path + "Screenshot" + DateTime.Today.Day.ToString() + DateTime.Today.Month.ToString() + DateTime.Today.Year.ToString() + ".png");
+					ResultsTitle = "RESULTS - SCREENSHOT SAVED!";
+				}
+
+				// Camera Blur
+				GameObject clientCamera = GameObject.Find("Client Camera");
+				if (clientCamera != null)
+				{
+					clientCamera.GetComponent<BlurEffect>().enabled = true;
+					clientCamera.GetComponent<BlurEffect>().blurSpread = Mathf.Lerp(clientCamera.GetComponent<BlurEffect>().blurSpread, 1, Time.deltaTime * 0.2f);
+					clientCamera.GetComponent<BlurEffect>().iterations = 2;
+				}
+
 			}
-
-			GUI.Label(new Rect((windowDim.x * 0.01f), windowDim.y * 0.003f, 500, 500), "This: " + milisecond + ":");
-
-			string second = thisLapS.ToString();
-			if (thisLapS < 10)
-			{
-				second = ("0" + thisLapS);
-			}
-
-			GUI.Label(new Rect((windowDim.x * 0.05f), windowDim.y * 0.003f, 500, 500), second + ":");
-
-			string minute = thisLapM.ToString();
-			if (thisLapM < 10)
-			{
-				minute = ("0" + thisLapM);
-			}
-
-			GUI.Label(new Rect((windowDim.x * 0.065f), windowDim.y * 0.003f, 500, 500), minute);
-
-			// Draw Best Lap Seconds
-
-			if (displayBest)
-			{
-				bestBoxHeight = Mathf.Lerp(bestBoxHeight, 0.4f, Time.deltaTime * 0.2f);
-			} else
-			{
-				bestBoxHeight = 0;
-			}
-
-			GUI.BeginGroup(new Rect(0,(windowDim.y / 2) * 0.08f, (windowDim.x / 2 ) * 0.18f, (windowDim.y / 2) * bestBoxHeight));
-				GUI.Box(new Rect(0,0, (windowDim.x / 2 ) * 0.3f, (windowDim.y / 2) * 0.1f),"", UISkin);
-				
-				string Bmilisecond = bestLapMS.ToString();
-				if (bestLapMS < 10)
-				{
-					Bmilisecond = ("0" + bestLapMS);
-				}
-				
-				if (bestLapMS > 99)
-				{
-					Bmilisecond = ("99");
-				}
-				
-				GUI.Label(new Rect((windowDim.x * 0.01f), windowDim.y * 0.01f, 500, 500), "Best: " + Bmilisecond + ":");
-				
-				string Bsecond = bestLapS.ToString();
-				if (bestLapS < 10)
-				{
-					Bsecond = ("0" + bestLapS);
-				}
-				
-				GUI.Label(new Rect((windowDim.x * 0.05f), windowDim.y * 0.01f, 500, 500), Bsecond + ":");
-				
-				string Bminute = bestLapM.ToString();
-				if (bestLapM < 10)
-				{
-					Bminute = ("0" + bestLapM);
-				}
-				
-				GUI.Label(new Rect((windowDim.x * 0.065f), windowDim.y * 0.01f, 500, 500), Bminute);
-			GUI.EndGroup();
-		}
-
-		if (isClient && thisRacerFinished)
-		{
-			Vector2 windowDim = new Vector2(Screen.width, Screen.height);
-
-			resultsWindowHeight = Mathf.Lerp(resultsWindowHeight, windowDim.y / 2, Time.deltaTime * 2);
-
-			// Draw Results Screen
-
-			GUI.BeginGroup(new Rect(windowDim.x / 4, windowDim.y / 4, windowDim.x / 2, resultsWindowHeight));
-
-			GUI.color = new Color(1,1,1, 0.8f);
-
-			// Main Box
-			Texture2D tempTexture = UISkin.hover.background;
-
-			UISkin.hover.background= null;
-			GUI.Box(new Rect(0, 0, windowDim.x / 2, windowDim.y / 2), "" ,UISkin);
-			//------------
-
-			GUI.color = new Color(1,1,1, 1);
-
-			// Times Box
-			GUI.BeginGroup(new Rect(0, windowDim.y / 12, windowDim.x / 5, windowDim.y / 3));
-				UIFont.fontSize = 24;
-				UIFont.alignment = TextAnchor.MiddleLeft;
-
-				GUI.Box(new Rect(0, 0, windowDim.x / 5, windowDim.y / 3), "" ,UISkin);
-				GUI.Label(new Rect(5, 16, 100,40), "Lap 1 - " + lapMS[1] + ":" + lapS[1] + ":" + lapM[1], UIFont);
-				GUI.Label(new Rect(5, 48, 100,40), "Lap 2 - " + lapMS[2] + ":" + lapS[2] + ":" + lapM[2], UIFont);
-				GUI.Label(new Rect(5, 80, 100,40), "Lap 3 - " + lapMS[3] + ":" + lapS[3] + ":" + lapM[3], UIFont);
-				GUI.Label(new Rect(5, 112, 100,40), "Lap 4 - " + lapMS[4] + ":" + lapS[4] + ":" + lapM[4], UIFont);
-				GUI.Label(new Rect(5, 144, 100,40), "Lap 5 - " + lapMS[5] + ":" + lapS[5] + ":" + lapM[5], UIFont);
-			GUI.EndGroup();
-			//------------
-
-
-
-			// Results Text
-			GUI.color = new Color(1,1,1,1);
-			UIFont.normal.textColor = new Color(0.1f,0.1f,0.1f,1);
-			UIFont.fontSize = 32;
-			UIFont.alignment = TextAnchor.UpperCenter;
-			
-			GUI.Label(new Rect(windowDim.x / 4 - 50, 0, 100, 100),ResultsTitle, UIFont);
-			//------------
-
-			// Buttons
-			GUI.BeginGroup(new Rect(windowDim.x / 4, windowDim.y / 12, windowDim.x / 5, windowDim.y / 3));
-			UISkin.hover.background = tempTexture;
-			UISkin.alignment = TextAnchor.MiddleCenter;
-				if (GUI.Button(new Rect(0,0, 200, 30), "Race Again!", UISkin))
-				{
-					Application.LoadLevel(0);
-				}
-			GUI.EndGroup();
-			//------------
-
-			GUI.EndGroup();
-
-			// Hotkeys
-			if (Input.GetKeyDown(KeyCode.S))
-			{
-				string documentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments).ToString();
-				if (!Directory.Exists(documentsFolder + "/AGR2280/Screenshots/"))
-				{
-					Directory.CreateDirectory(documentsFolder + "/AGR2280/Screenshots/");
-				}
-				string path = documentsFolder + "/AGR2280/Screenshots/";
-
-				Application.CaptureScreenshot(path + "Screenshot" + DateTime.Today.Day.ToString() + DateTime.Today.Month.ToString() + DateTime.Today.Year.ToString() + ".png");
-				ResultsTitle = "RESULTS - SCREENSHOT SAVED!";
-			}
-
-
-
 		}
 	}
 }
