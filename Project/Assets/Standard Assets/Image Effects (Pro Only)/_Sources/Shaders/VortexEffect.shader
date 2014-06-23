@@ -26,7 +26,7 @@ uniform float _Angle;
 uniform float4 _CenterRadius;
 
 struct v2f {
-	float4 pos : POSITION;
+	float4 pos : SV_POSITION;
 	float2 uv : TEXCOORD0;
 	float2 uvOrig : TEXCOORD1;
 };
@@ -41,7 +41,7 @@ v2f vert (appdata_img v)
 	return o;
 }
 
-float4 frag (v2f i) : COLOR
+float4 frag (v2f i) : SV_Target
 {
 	float2 offset = i.uvOrig;
 	float angle = 1.0 - length(offset / _CenterRadius.zw);

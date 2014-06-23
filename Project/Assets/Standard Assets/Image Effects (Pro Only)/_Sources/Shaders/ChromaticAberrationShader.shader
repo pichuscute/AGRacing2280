@@ -8,7 +8,7 @@ Shader "Hidden/ChromaticAberration" {
 	#include "UnityCG.cginc"
 	
 	struct v2f {
-		float4 pos : POSITION;
+		float4 pos : SV_POSITION;
 		float2 uv : TEXCOORD0;
 	};
 	
@@ -29,7 +29,7 @@ Shader "Hidden/ChromaticAberration" {
 		return o;
 	} 
 	
-	half4 fragDs(v2f i) : COLOR 
+	half4 fragDs(v2f i) : SV_Target 
 	{
 		half4 c = tex2D (_MainTex, i.uv.xy + _MainTex_TexelSize.xy * 0.5);
 		c += tex2D (_MainTex, i.uv.xy - _MainTex_TexelSize.xy * 0.5);
@@ -38,7 +38,7 @@ Shader "Hidden/ChromaticAberration" {
 		return c/4.0;
 	}
 
-	half4 frag(v2f i) : COLOR 
+	half4 frag(v2f i) : SV_Target 
 	{
 		half2 coords = i.uv;
 		half2 uv = i.uv;
@@ -73,7 +73,7 @@ Shader "Hidden/ChromaticAberration" {
 		half2(-0.32194,-0.932615),
 	};
 
-	half4 fragComplex(v2f i) : COLOR 
+	half4 fragComplex(v2f i) : SV_Target 
 	{
 		half2 coords = i.uv;
 		half2 uv = i.uv;
@@ -110,7 +110,7 @@ Shader "Hidden/ChromaticAberration" {
 		// debug #2:
 		//return isEdge;
 
-		color.rgb = lerp(color.rgb, blurredTap.rgb, isEdge);
+		color.rb = lerp(color.rb, blurredTap.rb, isEdge);
 		
 		return color;
 	}

@@ -1,0 +1,56 @@
+﻿<Window x:Name="Window" x:Class="AGRLauncher.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="388" Width="800" WindowStartupLocation="CenterScreen" Topmost="True" Margin="3" BorderBrush="#FF00A5FF" BorderThickness="5" WindowStyle="None" ResizeMode="NoResize">
+    <Grid x:Name="MainGrid" Height="388" VerticalAlignment="Top" Width="800" Margin="0" Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="15*"/>
+            <RowDefinition Height="179*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="123*"/>
+            <ColumnDefinition Width="157*"/>
+            <ColumnDefinition Width="120*"/>
+        </Grid.ColumnDefinitions>
+        <Label x:Name="TitleLabel" Content="AGR2280" Grid.Column="1" HorizontalAlignment="Center" Margin="57,17,51,0" VerticalAlignment="Top" Foreground="#FF00A5FF" FontFamily="Calibri" FontSize="48" FontWeight="Bold" FontStyle="Italic" Grid.RowSpan="2" Width="206"/>
+        <Label x:Name="DownloadLabel" Content="Downloads" HorizontalAlignment="Center" Margin="63,2,61,0" VerticalAlignment="Top" Foreground="#FF00A5FF" FontFamily="Calibri" FontSize="24" FontWeight="Bold" FontStyle="Italic" Grid.Row="1"/>
+        <Label x:Name="NewsLabel" Content="Latest News" HorizontalAlignment="Center" Margin="58,0,49,0" VerticalAlignment="Top" Foreground="#FF00A5FF" FontFamily="Calibri" FontSize="24" FontWeight="Bold" FontStyle="Italic" Grid.Row="1" Grid.Column="2" Width="133"/>
+        <Label x:Name="VersionStatus" Content="Up to date!" HorizontalAlignment="Center" Margin="80,318,82,0" VerticalAlignment="Top" Foreground="#FF00A5FF" FontFamily="Calibri" FontSize="16" Grid.Row="1" FontStyle="Italic" RenderTransformOrigin="0.193,0.5"/>
+        <Button x:Name="btnLaunch" Content="Launch Game" Grid.Column="1" HorizontalAlignment="Left" Margin="57,71,0,0" Grid.Row="1" VerticalAlignment="Top" Width="206" Style="{DynamicResource FlatButton}" BorderBrush="#FF00A5FF" Foreground="White" FontFamily="Calibri" FontSize="18" ToolTip="Launch AGR2280">
+            <Button.Background>
+                <SolidColorBrush Color="#FF00A5FF"/>
+            </Button.Background>
+        </Button>
+        <Border x:Name="TitleBar" BorderThickness="0" Grid.ColumnSpan="3" HorizontalAlignment="Left" Height="30" VerticalAlignment="Top" Width="790" Background="#FF00A5FF" MouseDown="TitleBar_MouseDown"/>
+        <Button x:Name="btnClose" Content="X" Grid.Column="2" HorizontalAlignment="Center" Height="30" Margin="196,0,10,0" Width="34" Style="{DynamicResource FlatControlButton}" Foreground="White" BorderBrush="#FF00A5FF" FontWeight="Bold" FontStyle="Italic" FontFamily="Calibri" FontSize="20" VerticalAlignment="Center" Click="btnClose_Click" ToolTip="Close" OverridesDefaultStyle="True" Background="#FF00A5FF" MouseEnter="btnClose_MouseEnter" MouseLeave="btnClose_MouseLeave" MouseDown="btnClose_MouseDown"/>
+        <Button x:Name="btnMinimise" Content="-" Grid.Column="2" HorizontalAlignment="Center" Height="30" Margin="163,0,44,0" Width="34" Style="{DynamicResource FlatControlButton}" Background="#FF00A5FF" Foreground="White" BorderBrush="#FF00A5FF" FontWeight="Bold" FontStyle="Italic" FontFamily="Calibri" FontSize="24" VerticalAlignment="Center" RenderTransformOrigin="0.735,0.633" Click="btnMinimise_Click" ToolTip="Minimise" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" MouseEnter="btnMinimise_MouseEnter" MouseLeave="btnMinimise_MouseLeave"/>
+        <Expander x:Name="AboutAGR2280" Header="About AGR2280" HorizontalAlignment="Left" Margin="8,4,0,0" VerticalAlignment="Top" Foreground="White" FontFamily="Calibri" FontWeight="Bold" FontStyle="Italic" FontSize="14" Background="{x:Null}" BorderBrush="#FF00A5FF" Collapsed="AboutAGR2280_Collapsed" Expanded="AboutAGR2280_Expanded">
+            <Grid Background="#FFE5E5E5"/>
+        </Expander>
+        <Border x:Name="PilotArea" BorderBrush="#FF00A5FF" BorderThickness="0,5,0,0" Grid.Column="1" HorizontalAlignment="Left" Height="103" Margin="0,255,0,0" Grid.Row="1" VerticalAlignment="Top" Width="314" Background="White">
+            <Label x:Name="PilotName" Content="Loading Profile..." HorizontalAlignment="Center" Margin="47,-5,27,0" VerticalAlignment="Top" Foreground="#FF00A5FF" FontFamily="Calibri" FontSize="20" FontWeight="Bold" FontStyle="Italic" Width="240"/>
+        </Border>
+        <Label x:Name="PilotRank" Content="Loading Rank..." HorizontalAlignment="Center" Margin="52,273,22,0" VerticalAlignment="Top" Foreground="#FF00A5FF" FontFamily="Calibri" FontSize="16" Width="240" Grid.Column="1" Grid.Row="1" FontStyle="Italic"/>
+        <Image x:Name="PilotAvatar" HorizontalAlignment="Left" Height="42" Margin="5,261,0,0" Grid.Row="1" VerticalAlignment="Top" Width="42" Grid.Column="1"/>
+        <Button x:Name="btnLogin" Content="Sign In" Grid.Column="1" HorizontalAlignment="Left" Margin="10,218,0,0" Grid.Row="1" VerticalAlignment="Top" Width="136" Style="{DynamicResource FlatButton}" BorderBrush="#FF00A5FF" Foreground="White" FontFamily="Calibri" FontSize="18" Background="#FF00A5FF" ToolTip="Login to your AGR2280 account"/>
+        <Button x:Name="btnCreate" Content="Create Account" Grid.Column="1" HorizontalAlignment="Left" Margin="168,218,0,0" Grid.Row="1" VerticalAlignment="Top" Width="136" Style="{DynamicResource FlatButton}" BorderBrush="#FF00A5FF" Foreground="White" FontFamily="Calibri" FontSize="18" Background="#FF00A5FF" ToolTip="Create an AGR2280 account"/>
+        <Rectangle x:Name="DownloadProgressBG" Fill="#FFF3F3F3" HorizontalAlignment="Left" Height="26" Margin="6,51,0,0" Grid.Row="1" Stroke="#FFF3F3F3" VerticalAlignment="Top" Width="236" RenderTransformOrigin="0.04,-0.32"/>
+        <Rectangle x:Name="DownloadProgress" Fill="#FF00A5FF" HorizontalAlignment="Left" Height="16" Margin="10,56,0,0" Grid.Row="1" Stroke="#FF00A5FF" VerticalAlignment="Top" Width="226" RenderTransformOrigin="0.04,-0.32"/>
+        <Label x:Name="DownloadProgressLabel" Content="0%" HorizontalAlignment="Center" Margin="206,71,10,0" VerticalAlignment="Top" Foreground="#FF00A5FF" FontFamily="Calibri" FontSize="16" Grid.Row="1" FontStyle="Italic" RenderTransformOrigin="0.193,0.5"/>
+        <Button x:Name="btnForceUpdate" Content="Force Update Check" HorizontalAlignment="Left" Margin="10,286,0,0" Grid.Row="1" VerticalAlignment="Top" Width="226" Style="{DynamicResource FlatButton}" BorderBrush="#FF00A5FF" Foreground="White" FontFamily="Calibri" FontSize="18" ToolTip="Launch AGR2280" Background="#FF00A5FF"/>
+        <Button x:Name="btnBeginDownload" Content="Download" HorizontalAlignment="Left" Margin="10,106,0,0" Grid.Row="1" VerticalAlignment="Top" Width="103" Style="{DynamicResource FlatButton}" BorderBrush="#FF00A5FF" Foreground="White" FontFamily="Calibri" FontSize="18" ToolTip="Start/resume download" Background="#FF00A5FF"/>
+        <Button x:Name="btnPauseDownload" Content="Pause" HorizontalAlignment="Left" Margin="133,106,0,0" Grid.Row="1" VerticalAlignment="Top" Width="103" Style="{DynamicResource FlatButton}" BorderBrush="#FF00A5FF" Foreground="White" FontFamily="Calibri" FontSize="18" ToolTip="Start/resume download" Background="#FF00A5FF"/>
+        <Button x:Name="btnSelectDirectory" Content="Select Directory" HorizontalAlignment="Left" Margin="55,143,0,0" Grid.Row="1" VerticalAlignment="Top" Width="140" Style="{DynamicResource FlatButton}" BorderBrush="#FF00A5FF" Foreground="White" FontFamily="Calibri" FontSize="18" ToolTip="Start/resume download" Background="#FF00A5FF" RenderTransformOrigin="0.757,1.625"/>
+        <Label x:Name="CurrentDirLabel" Content="Current Directory" HorizontalAlignment="Center" Margin="1,178,116,0" VerticalAlignment="Top" Foreground="#FF00A5FF" FontFamily="Calibri" FontSize="16" Grid.Row="1" FontStyle="Italic" RenderTransformOrigin="0.193,0.5" Width="129" FontWeight="Bold" Background="{x:Null}"/>
+        <Label x:Name="LatestNewsTitle" Content="V0.02" HorizontalAlignment="Center" Margin="0,48,0,0" VerticalAlignment="Top" Foreground="#FF00A5FF" FontFamily="Calibri" FontSize="20" FontStyle="Italic" Width="240" HorizontalContentAlignment="Center" Grid.Column="2" Grid.Row="1"/>
+        <TextBox x:Name="NewsText" Grid.Column="2" HorizontalAlignment="Left" Height="240" Margin="10,78,0,0" Grid.Row="1" TextWrapping="Wrap" Text="V0.02 recently released and has many huge improvements to physics! It also has many bug fixes." VerticalAlignment="Top" Width="210" SelectionBrush="#FFBDDEFF" Foreground="#FF00A5FF" FontFamily="Calibri" FontStyle="Italic" BorderThickness="3" BorderBrush="#FF00A5FF" Focusable="False"/>
+        <Rectangle x:Name="DarkenCover" Grid.Column="1" HorizontalAlignment="Left" Height="358" Stroke="White" VerticalAlignment="Top" Width="544" Grid.ColumnSpan="2" Fill="White" Opacity="0.88" Grid.Row="1" Visibility="Hidden"/>
+        <TextBox x:Name="DirectoryTextBox" HorizontalAlignment="Left" Height="23" Margin="6,208,0,0" Grid.Row="1" TextWrapping="Wrap" Text="C:\Program Files(x86)\Vonsnake\AGR2280" VerticalAlignment="Top" Width="235" Foreground="#FF00A5FF" FontFamily="Calibri" FontStyle="Italic" BorderThickness="3" BorderBrush="#FF00A5FF" FontSize="11"/>
+        <Grid x:Name="AboutRect" HorizontalAlignment="Left" Height="348" Grid.Row="1" VerticalAlignment="Top" Width="246" Background="White" Visibility="Hidden">
+            <Label x:Name="AGRVersion" Content="0.1" HorizontalAlignment="Center" Margin="-1,318,0,0" VerticalAlignment="Top" Foreground="#FF00A5FF" FontFamily="Calibri" FontSize="16" Width="247" HorizontalContentAlignment="Center" FontStyle="Italic"/>
+            <Label x:Name="AGRVersion_Copy" Content="Created by Vonsnake.&#xD;&#xA;&#xD;&#xA;People who helped:&#xD;&#xA;There are currently no helping hands&#xD;&#xA;:(&#xD;&#xA;" HorizontalAlignment="Center" Margin="0,0,-1,0" VerticalAlignment="Top" Foreground="#FF00A5FF" FontFamily="Calibri" FontSize="16" Width="247" FontStyle="Italic" Height="313" HorizontalContentAlignment="Center"/>
+        </Grid>
+        <Button x:Name="btnEditAccount" Content="Modify" Grid.Column="1" HorizontalAlignment="Left" Margin="214,308,0,0" Grid.Row="1" VerticalAlignment="Top" Width="78" Style="{DynamicResource FlatButton}" BorderBrush="#FF00A5FF" Foreground="White" FontFamily="Calibri" FontSize="18" Background="#FF00A5FF" ToolTip="Login to your AGR2280 account"/>
+
+    </Grid>
+</Window>

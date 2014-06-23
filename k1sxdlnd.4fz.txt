@@ -1,0 +1,64 @@
+﻿
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#	new file:   Project/ProjectSettings/AudioManager.asset
+#	new file:   Project/ProjectSettings/DynamicsManager.asset
+#	new file:   Project/ProjectSettings/EditorBuildSettings.asset
+#	new file:   Project/ProjectSettings/EditorSettings.asset
+#	new file:   Project/ProjectSettings/GraphicsSettings.asset
+#	new file:   Project/ProjectSettings/InputManager.asset
+#	new file:   Project/ProjectSettings/NavMeshLayers.asset
+#	new file:   Project/ProjectSettings/NetworkManager.asset
+#	new file:   Project/ProjectSettings/Physics2DSettings.asset
+#	new file:   Project/ProjectSettings/ProjectSettings.asset
+#	new file:   Project/ProjectSettings/QualitySettings.asset
+#	new file:   Project/ProjectSettings/TagManager.asset
+#	new file:   Project/ProjectSettings/TimeManager.asset
+#	new file:   Project/fmod_event.dll
+#	new file:   Project/fmod_event64.dll
+#	new file:   Project/fmod_event_net.dll
+#	new file:   Project/fmodex.dll
+#	new file:   Project/fmodex64.dll
+#	new file:   Project/obj/Debug/Assembly-CSharp-firstpass.csproj.FileListAbsolute.txt
+#	new file:   Project/obj/Debug/Assembly-CSharp-firstpass.csprojResolveAssemblyReference.cache
+#	new file:   Project/obj/Debug/Assembly-CSharp-firstpass.dll
+#	new file:   Project/obj/Debug/Assembly-CSharp-firstpass.pdb
+#	new file:   Project/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+#
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#	.gitattributes
+#	.gitignore
+#	Binaries/
+#	Documentation/
+#	External/
+#	Launcher/
+#	Project/Assembly-CSharp-Editor-firstpass-vs.csproj
+#	Project/Assembly-CSharp-Editor-firstpass.csproj
+#	Project/Assembly-CSharp-Editor-vs.csproj
+#	Project/Assembly-CSharp-Editor.csproj
+#	Project/Assembly-CSharp-firstpass-vs.csproj
+#	Project/Assembly-CSharp-firstpass.csproj
+#	Project/Assembly-CSharp-vs.csproj
+#	Project/Assembly-CSharp.csproj
+#	Project/Assembly-UnityScript-Editor-firstpass-vs.unityproj
+#	Project/Assembly-UnityScript-Editor-firstpass.unityproj
+#	Project/Assembly-UnityScript-Editor-vs.unityproj
+#	Project/Assembly-UnityScript-Editor.unityproj
+#	Project/Assembly-UnityScript-firstpass-vs.unityproj
+#	Project/Assembly-UnityScript-firstpass.unityproj
+#	Project/Assembly-UnityScript-vs.unityproj
+#	Project/Assembly-UnityScript.unityproj
+#	Project/Library/
+#	Project/Project-csharp.sln
+#	Project/Project.sln
+#	Project/Project.userprefs
+#	Project/libfmod_event.dylib
+#	Project/libfmod_eventnet.dylib
+#	Project/libfmodex.dylib
+

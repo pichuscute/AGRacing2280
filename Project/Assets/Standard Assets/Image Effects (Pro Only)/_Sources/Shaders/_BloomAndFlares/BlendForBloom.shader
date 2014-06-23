@@ -9,11 +9,11 @@ Shader "Hidden/BlendForBloom" {
 	#include "UnityCG.cginc"
 	
 	struct v2f {
-		float4 pos : POSITION;
+		float4 pos : SV_POSITION;
 		float2 uv[2] : TEXCOORD0;
 	};
 	struct v2f_mt {
-		float4 pos : POSITION;
+		float4 pos : SV_POSITION;
 		float2 uv[5] : TEXCOORD0;
 	};
 			
@@ -49,52 +49,52 @@ Shader "Hidden/BlendForBloom" {
 		return o;
 	}
 	
-	half4 fragScreen (v2f i) : COLOR {
+	half4 fragScreen (v2f i) : SV_Target {
 		half4 addedbloom = tex2D(_MainTex, i.uv[0].xy) * _Intensity;
 		half4 screencolor = tex2D(_ColorBuffer, i.uv[1]);
 		return 1-(1-addedbloom)*(1-screencolor);
 	}
 
-	half4 fragScreenCheap(v2f i) : COLOR {
+	half4 fragScreenCheap(v2f i) : SV_Target {
 		half4 addedbloom = tex2D(_MainTex, i.uv[0].xy) * _Intensity;
 		half4 screencolor = tex2D(_ColorBuffer, i.uv[1]);
 		return 1-(1-addedbloom)*(1-screencolor);
 	}
 
-	half4 fragAdd (v2f i) : COLOR {
+	half4 fragAdd (v2f i) : SV_Target {
 		half4 addedbloom = tex2D(_MainTex, i.uv[0].xy);
 		half4 screencolor = tex2D(_ColorBuffer, i.uv[1]);
 		return _Intensity * addedbloom + screencolor;
 	}
 
-	half4 fragAddCheap (v2f i) : COLOR {
+	half4 fragAddCheap (v2f i) : SV_Target {
 		half4 addedbloom = tex2D(_MainTex, i.uv[0].xy);
 		half4 screencolor = tex2D(_ColorBuffer, i.uv[1]);
 		return _Intensity * addedbloom + screencolor;
 	}
 
-	half4 fragVignetteMul (v2f i) : COLOR {
+	half4 fragVignetteMul (v2f i) : SV_Target {
 		return tex2D(_MainTex, i.uv[0].xy) * tex2D(_ColorBuffer, i.uv[0]);
 	}
 
-	half4 fragVignetteBlend (v2f i) : COLOR {
+	half4 fragVignetteBlend (v2f i) : SV_Target {
 		return half4(1,1,1, tex2D(_ColorBuffer, i.uv[0]).r);
 	}
 
-	half4 fragClear (v2f i) : COLOR {
+	half4 fragClear (v2f i) : SV_Target {
 		return 0;
 	}
 
-	half4 fragAddOneOne (v2f i) : COLOR {
+	half4 fragAddOneOne (v2f i) : SV_Target {
 		half4 addedColors = tex2D(_MainTex, i.uv[0].xy);
 		return addedColors * _Intensity;
 	}
 
-	half4 frag1Tap (v2f i) : COLOR {
+	half4 frag1Tap (v2f i) : SV_Target {
 		return tex2D(_MainTex, i.uv[0].xy);
 	}
 	
-	half4 fragMultiTapMax (v2f_mt i) : COLOR {
+	half4 fragMultiTapMax (v2f_mt i) : SV_Target {
 		half4 outColor = tex2D(_MainTex, i.uv[4].xy);
 		outColor = max(outColor, tex2D(_MainTex, i.uv[0].xy));
 		outColor = max(outColor, tex2D(_MainTex, i.uv[1].xy));
@@ -103,7 +103,7 @@ Shader "Hidden/BlendForBloom" {
 		return outColor;
 	}
 
-	half4 fragMultiTapBlur (v2f_mt i) : COLOR {
+	half4 fragMultiTapBlur (v2f_mt i) : SV_Target {
 		half4 outColor = 0;
 		outColor += tex2D(_MainTex, i.uv[0].xy);
 		outColor += tex2D(_MainTex, i.uv[1].xy);

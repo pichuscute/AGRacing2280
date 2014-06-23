@@ -69,7 +69,7 @@ Shader "Hidden/FastBloom" {
 			return o; 
 		}					
 						
-		fixed4 fragBloom ( v2f_simple i ) : COLOR
+		fixed4 fragBloom ( v2f_simple i ) : SV_Target
 		{	
         	#if UNITY_UV_STARTS_AT_TOP
 			
@@ -84,7 +84,7 @@ Shader "Hidden/FastBloom" {
 			#endif
 		} 
 		
-		fixed4 fragDownsample ( v2f_tap i ) : COLOR
+		fixed4 fragDownsample ( v2f_tap i ) : SV_Target
 		{				
 			fixed4 color = tex2D (_MainTex, i.uv20);
 			color += tex2D (_MainTex, i.uv21);
@@ -136,7 +136,7 @@ Shader "Hidden/FastBloom" {
 			return o; 
 		}	
 
-		half4 fragBlur8 ( v2f_withBlurCoords8 i ) : COLOR
+		half4 fragBlur8 ( v2f_withBlurCoords8 i ) : SV_Target
 		{
 			half2 uv = i.uv.xy; 
 			half2 netFilterWidth = i.offs;  
@@ -189,7 +189,7 @@ Shader "Hidden/FastBloom" {
 			return o; 
 		}	
 
-		half4 fragBlurSGX ( v2f_withBlurCoordsSGX i ) : COLOR
+		half4 fragBlurSGX ( v2f_withBlurCoordsSGX i ) : SV_Target
 		{
 			half2 uv = i.uv.xy;
 			

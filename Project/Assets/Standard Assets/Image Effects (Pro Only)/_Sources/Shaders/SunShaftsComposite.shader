@@ -10,7 +10,7 @@ Shader "Hidden/SunShaftsComposite" {
 	#include "UnityCG.cginc"
 	
 	struct v2f {
-		float4 pos : POSITION;
+		float4 pos : SV_POSITION;
 		float2 uv : TEXCOORD0;
 		#if UNITY_UV_STARTS_AT_TOP
 		float2 uv1 : TEXCOORD1;
@@ -18,7 +18,7 @@ Shader "Hidden/SunShaftsComposite" {
 	};
 		
 	struct v2f_radial {
-		float4 pos : POSITION;
+		float4 pos : SV_POSITION;
 		float2 uv : TEXCOORD0;
 		float2 blurVector : TEXCOORD1;
 	};
@@ -26,7 +26,7 @@ Shader "Hidden/SunShaftsComposite" {
 	sampler2D _MainTex;
 	sampler2D _ColorBuffer;
 	sampler2D _Skybox;
-	sampler2D _CameraDepthTexture;
+	sampler2D_float _CameraDepthTexture;
 	
 	uniform half _NoSkyBoxMask;
 		
@@ -52,7 +52,7 @@ Shader "Hidden/SunShaftsComposite" {
 		return o;
 	}
 		
-	half4 fragScreen(v2f i) : COLOR { 
+	half4 fragScreen(v2f i) : SV_Target { 
 		half4 colorA = tex2D (_MainTex, i.uv.xy);
 		#if UNITY_UV_STARTS_AT_TOP
 		half4 colorB = tex2D (_ColorBuffer, i.uv1.xy);
@@ -63,7 +63,7 @@ Shader "Hidden/SunShaftsComposite" {
 		return 1.0f - (1.0f-colorA) * (1.0f-depthMask);	
 	}
 
-	half4 fragAdd(v2f i) : COLOR { 
+	half4 fragAdd(v2f i) : SV_Target { 
 		half4 colorA = tex2D (_MainTex, i.uv.xy);
 		#if UNITY_UV_STARTS_AT_TOP
 		half4 colorB = tex2D (_ColorBuffer, i.uv1.xy);
@@ -84,7 +84,7 @@ Shader "Hidden/SunShaftsComposite" {
 		return o; 
 	}
 	
-	half4 frag_radial(v2f_radial i) : COLOR 
+	half4 frag_radial(v2f_radial i) : SV_Target 
 	{	
 		half4 color = half4(0,0,0,0);
 		for(int j = 0; j < SAMPLES_INT; j++)   
@@ -100,11 +100,11 @@ Shader "Hidden/SunShaftsComposite" {
 		return max (skyboxValue.a, _NoSkyBoxMask * dot (skyboxValue.rgb, float3 (0.59,0.3,0.11))); 		
 	}
 	
-	half4 frag_depth (v2f i) : COLOR {
+	half4 frag_depth (v2f i) : SV_Target {
 		#if UNITY_UV_STARTS_AT_TOP
-		float depthSample = UNITY_SAMPLE_DEPTH(tex2D (_CameraDepthTexture, i.uv1.xy));
+		float depthSample = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, i.uv1.xy);
 		#else
-		float depthSample = UNITY_SAMPLE_DEPTH(tex2D (_CameraDepthTexture, i.uv.xy));		
+		float depthSample = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, i.uv.xy);		
 		#endif
 		
 		half4 tex = tex2D (_MainTex, i.uv.xy);
@@ -128,7 +128,7 @@ Shader "Hidden/SunShaftsComposite" {
 		return outColor;
 	}
 	
-	half4 frag_nodepth (v2f i) : COLOR {
+	half4 frag_nodepth (v2f i) : SV_Target {
 		#if UNITY_UV_STARTS_AT_TOP
 		float4 sky = (tex2D (_Skybox, i.uv1.xy));
 		#else

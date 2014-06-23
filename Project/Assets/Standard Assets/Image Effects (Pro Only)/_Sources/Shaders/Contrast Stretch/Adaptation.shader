@@ -24,7 +24,7 @@ uniform sampler2D _MainTex; // currently adapted to
 uniform sampler2D _CurTex; // new value to adapt to
 uniform float4 _AdaptParams; // x=adaptLerp, y=limitMinimum, z=limitMaximum
 
-float4 frag (v2f_img i) : COLOR  {
+float4 frag (v2f_img i) : SV_Target  {
 	// value is: max, min
 	float2 valAdapted = tex2D(_MainTex, i.uv).xy;
 	float2 valCur = tex2D(_CurTex, i.uv).xy;

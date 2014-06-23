@@ -28,7 +28,7 @@ Properties {
 			};
 	
 			struct v2f {
-				float4 vertex : POSITION;
+				float4 vertex : SV_POSITION;
 				float2 texcoord : TEXCOORD;
 			};
 			
@@ -45,7 +45,7 @@ Properties {
 	
 			sampler2D _MainTex;
 			
-			half4 frag (v2f i) : COLOR
+			half4 frag (v2f i) : SV_Target
 			{
 				return half4(tex2D(_MainTex, i.texcoord).rgb, _AccumOrig );
 			}
@@ -74,7 +74,7 @@ Properties {
 			};
 	
 			struct v2f {
-				float4 vertex : POSITION;
+				float4 vertex : SV_POSITION;
 				float2 texcoord : TEXCOORD;
 			};
 			
@@ -90,7 +90,7 @@ Properties {
 	
 			sampler2D _MainTex;
 			
-			half4 frag (v2f i) : COLOR
+			half4 frag (v2f i) : SV_Target
 			{
 				return tex2D(_MainTex, i.texcoord);
 			}

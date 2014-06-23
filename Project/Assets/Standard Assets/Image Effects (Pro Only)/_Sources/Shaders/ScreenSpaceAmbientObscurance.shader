@@ -44,7 +44,7 @@ Shader "Hidden/ScreenSpaceAmbientObscurance"
 	float4 _ProjInfo;
 	float4x4 _ProjectionInv; // ref only
 
-	sampler2D _CameraDepthTexture;
+	sampler2D_float _CameraDepthTexture;
 	sampler2D _Rand;
 	sampler2D _AOTex;
 	sampler2D _MainTex;
@@ -66,7 +66,7 @@ Shader "Hidden/ScreenSpaceAmbientObscurance"
 
 	struct v2f 
 	{
-		float4 pos : POSITION;
+		float4 pos : SV_POSITION;
 		float2 uv : TEXCOORD0;
 		float2 uv2 : TEXCOORD1;
 	};
@@ -146,7 +146,7 @@ Shader "Hidden/ScreenSpaceAmbientObscurance"
 	float3 GetPosition(float2 ssP) {
 		float3 P;
 
-		P.z = UNITY_SAMPLE_DEPTH(tex2D(_CameraDepthTexture, ssP.xy));
+		P.z = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, ssP.xy);
 
 		// Offset to pixel center
 		P = ReconstructCSPosition(float2(ssP) /*+ float2(0.5, 0.5)*/, P.z);
@@ -159,7 +159,7 @@ Shader "Hidden/ScreenSpaceAmbientObscurance"
 		float2 ssP = saturate(float2(ssR*unitOffset) + ssC);
 
 		float3 P;
-		P.z = UNITY_SAMPLE_DEPTH(tex2D(_CameraDepthTexture, ssP.xy));
+		P.z = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, ssP.xy);
 
 		// Offset to pixel center
 		P = ReconstructCSPosition(float2(ssP)/* + float2(0.5, 0.5)*/, P.z);
@@ -190,7 +190,7 @@ Shader "Hidden/ScreenSpaceAmbientObscurance"
 	    return f * f * f * max((vn - bias) / (epsilon + vv), 0.0);
 	}
 
-	float4 fragAO(v2f i) : COLOR
+	float4 fragAO(v2f i) : SV_Target
 	{
 		float4 fragment = fixed4(1,1,1,1);
 
@@ -242,7 +242,7 @@ Shader "Hidden/ScreenSpaceAmbientObscurance"
 		return fragment;
 	}
 
-	float4 fragUpsample (v2f i) : COLOR
+	float4 fragUpsample (v2f i) : SV_Target
 	{
 		float4 fragment = fixed4(1,1,1,1);
 
@@ -255,13 +255,13 @@ Shader "Hidden/ScreenSpaceAmbientObscurance"
 		return fragment;
 	}
 
-	float4 fragApply (v2f i) : COLOR
+	float4 fragApply (v2f i) : SV_Target
 	{
 		float4 ao = tex2D(_AOTex, i.uv2.xy);
 		return tex2D(_MainTex, i.uv.xy) * ao.rrrr;
 	}
 
-	float4 fragApplySoft (v2f i) : COLOR
+	float4 fragApplySoft (v2f i) : SV_Target
 	{
 		float4 color = tex2D(_MainTex, i.uv.xy);
 
@@ -274,7 +274,7 @@ Shader "Hidden/ScreenSpaceAmbientObscurance"
 		return color * float4(ao,ao,ao,5)/5;
 	}
 
-	float4 fragBlurBL (v2f i) : COLOR
+	float4 fragBlurBL (v2f i) : SV_Target
 	{
 		float4 fragment = float4(1,1,1,1);
 

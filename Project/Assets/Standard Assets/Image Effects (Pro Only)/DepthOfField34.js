@@ -3,7 +3,7 @@
 
 @script ExecuteInEditMode
 @script RequireComponent (Camera)
-@script AddComponentMenu ("Image Effects/Camera/Depth of Field (3.4)") 
+@script AddComponentMenu ("Image Effects/Camera/Depth of Field (deprecated)") 
 
 enum Dof34QualitySetting {
 	OnlyBackground = 1,

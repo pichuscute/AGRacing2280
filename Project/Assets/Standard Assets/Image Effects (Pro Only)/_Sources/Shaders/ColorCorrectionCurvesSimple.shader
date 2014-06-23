@@ -12,7 +12,7 @@ Shader "Hidden/ColorCorrectionCurvesSimple" {
 	#include "UnityCG.cginc"
 	
 	struct v2f {
-		float4 pos : POSITION;
+		float4 pos : SV_POSITION;
 		half2 uv : TEXCOORD0;
 	};
 	
@@ -28,7 +28,7 @@ Shader "Hidden/ColorCorrectionCurvesSimple" {
 		return o;
 	} 
 	
-	fixed4 frag(v2f i) : COLOR 
+	fixed4 frag(v2f i) : SV_Target 
 	{
 		fixed4 color = tex2D(_MainTex, i.uv); 
 		

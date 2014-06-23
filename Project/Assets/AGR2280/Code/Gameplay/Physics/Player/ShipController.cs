@@ -685,7 +685,7 @@ public class ShipController : MonoBehaviour {
 				hasSideShiftRight = false;
 				sideShiftRight = false;
 				sideShiftTimer += Time.fixedDeltaTime * 50;
-				if (sideShiftTimer > 10)
+				if (sideShiftTimer > 12)
 				{
 					sideShiftRight = false;
 					sideShiftCooldown = 10;
@@ -734,7 +734,7 @@ public class ShipController : MonoBehaviour {
 				hasSideShiftLeft = false;
 				sideShiftLeft = false;
 				sideShiftTimer += Time.fixedDeltaTime * 50;
-				if (sideShiftTimer > 10)
+				if (sideShiftTimer > 12)
 				{
 					sideShiftRight = false;
 					sideShiftCooldown = 10;
@@ -811,59 +811,42 @@ public class ShipController : MonoBehaviour {
 				shipAnglePitchHelp = 0;
 				rigidbody.angularDrag = groundAngularDrag;
 
-				transform.rotation = Quaternion.Euler(transform.eulerAngles.x + currentPitch, transform.eulerAngles.y, transform.eulerAngles.z);
+				transform.rotation = Quaternion.Euler(transform.eulerAngles.x + (currentPitch * 2), transform.eulerAngles.y, transform.eulerAngles.z);
 
 				// Rotate to track normals
 				if (frontHit.collider.gameObject.layer != LayerMask.NameToLayer("Track_Wall"))
 				{
-					wantedTrackRot = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.Cross(transform.right, frontHit.normal), frontHit.normal), Time.deltaTime * hoverRotToSpeed);
-					transform.rotation = Quaternion.Slerp(transform.rotation, wantedTrackRot, Time.deltaTime * hoverRotNowSpeed);
+					float NowSpeed = hoverRotNowSpeed;
+					float ToSpeed = hoverRotToSpeed;
+
+					wantedTrackRot = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.Cross(transform.right, frontHit.normal), frontHit.normal), Time.deltaTime * ToSpeed);
+					transform.rotation = Quaternion.Slerp(transform.rotation, wantedTrackRot, Time.deltaTime * NowSpeed);
 				}
 
 				// Respawn 
 				if (frontHit.collider.gameObject.tag != "TrackSegment")
 				{
 					canRespawn = true;
-					respawnLength = 0.9f;
+					respawnLength = 0.5f;
 				}
 
 				// Apply Force
-				//rigidbody.AddForceAtPosition(new Vector3(0, hoverForce, 0), RaycastFrontPos);
-				float hoverDistance = shipAntiGravRideHeight;
-				float hoverForce = hoverDistance - frontHit.distance;
-				
-				float springCost = hoverForce * shipBaseHover;
-
-				
-				if (RaycastFrontDistance < shipAntiGravRideHeight / 2)
-				{
-					springCost 	= hoverForce * (shipBaseHover) * 1.5f;
-				}
-
-				Vector3 spring = transform.TransformPoint(0,0, RaycastOffset) - frontHit.point;
-				float length = spring.magnitude;
-				float displacement = length - (shipAntiGravRideHeight);
-				
-				Vector3 springN = spring / length;
-				Vector3 restoreForce = springN*(displacement*springCost);
-
-				// Apply Hover
-				shipFrontHover = -restoreForce.y;
+				shipBaseHover = 85;
+				float suspensionForce = shipBaseHover * (shipAntiGravRideHeight - (frontHit.distance));
 
 				if (frontHit.distance < shipAntiGravRideHeight / 2)
 				{
-					// Double the rotation speed
-					wantedTrackRot = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.Cross(transform.right, frontHit.normal), frontHit.normal), Time.deltaTime * hoverRotToSpeed);
-					transform.RotateAround(RaycastFrontPos, transform.TransformDirection(Vector3.right), wantedTrackRot.w);
+					shipBaseHover = 95;
+					suspensionForce = shipBaseHover * (shipAntiGravRideHeight * 2 - (frontHit.distance));	
 				}
-
-				rigidbody.AddForceAtPosition(new Vector3(0, shipFrontHover, 0), transform.TransformPoint(0,0, RaycastOffset));
+				suspensionForce -= 0.5f * rigidbody.velocity.y;
+				rigidbody.AddForceAtPosition(new Vector3(0, suspensionForce, 0), transform.TransformPoint(0,0, RaycastOffset));
 
 				// Complete stop
 				
 				if (RaycastFrontDistance < shipAntiGravRideHeight)
 				{
-					rigidbody.angularVelocity = new Vector3(0, 0, 0);
+					rigidbody.angularVelocity = new Vector3(0,0,0);
 					if (shipReachedTerminalVelocity)
 					{
 						// Wobble
@@ -935,38 +918,26 @@ public class ShipController : MonoBehaviour {
 		RaycastHit backHit;
 		if (Physics.Raycast(transform.TransformPoint(0,0, -RaycastOffset), -Vector3.up, out backHit))
 		{
-			backGravity = 0;
 			RaycastFrontDistance = backHit.distance;
 			if (backHit.distance < shipAntiGravRideHeight)
 			{
 				// Complete stop
+				rigidbody.angularVelocity = new Vector3(0,0,0);
 
-				if (RaycastFrontDistance < shipAntiGravRideHeight)
-				{
-					rigidbody.angularVelocity = new Vector3(0, 0, 0);
-
-				}
-				
 				// Apply Force
-				//rigidbody.AddForceAtPosition(new Vector3(0, hoverForce, 0), RaycastBackPos);
-				float hoverDistance = shipAntiGravRideHeight;
-				float hoverForce = hoverDistance - backHit.distance;
-
-				float springCost = hoverForce * shipBaseHover;
-				Vector3 spring = transform.TransformPoint(0,0, -RaycastOffset) - backHit.point;
-				float length = spring.magnitude;
-				float displacement = length - (shipAntiGravRideHeight);
+				shipBaseHover = 25;
+				float suspensionForce = shipBaseHover * (shipAntiGravRideHeight - (frontHit.distance));
 				
-				Vector3 springN = spring / length;
-				Vector3 restoreForce = springN*(displacement*springCost);
+				if (frontHit.distance < shipAntiGravRideHeight / 2)
+				{
+					shipBaseHover = 55;
+					suspensionForce = shipBaseHover * (shipAntiGravRideHeight * 2 - (frontHit.distance));	
+				}
+				suspensionForce -= 0.2f * rigidbody.velocity.y;
+				rigidbody.AddForceAtPosition(new Vector3(0, suspensionForce, 0), transform.TransformPoint(0,0, -RaycastOffset));
 
-				shipBackHoverDamping = 1.5f;
-				float damper = shipBackHoverDamping * rigidbody.velocity.y;
-
-				shipBackHover = -restoreForce.y;
-				shipBackHover -= damper;
-
-				rigidbody.AddForceAtPosition(new Vector3(0, shipBackHover, 0), transform.TransformPoint(0,0, -RaycastOffset));
+				// Fake angular velocity
+				transform.Rotate(Vector3.right * (Mathf.Clamp((backHit.point.y + frontHit.distance) - (frontHit.point.y + backHit.distance), -0.2f, 0.2f)));
 			} else 
 			{
 				shipBackHoverDamping = 0;
@@ -978,15 +949,15 @@ public class ShipController : MonoBehaviour {
 
 		if (isGrounded)
 		{
-			shipGravity = Mathf.Lerp (shipGravity, shipPhysicsTrackGravity, Time.deltaTime * 100);
+			shipGravity = Mathf.Lerp (shipGravity, shipPhysicsTrackGravity, Time.deltaTime * 95);
 			shipFallingSlowdown = 0;
-			backGravity = 0;
+			backGravity = Mathf.Lerp (backGravity, 0, Time.deltaTime * 10);
 		} else 
 		{
 			if (frontHit.distance > shipAntiGravRideHeight + shipAntiGravReboundJumpTime)
 			{
 				isAR = true;
-				shipFallingSlowdown = Mathf.Lerp( shipFallingSlowdown, 2, Time.deltaTime * 5);
+				shipFallingSlowdown = Mathf.Lerp( shipFallingSlowdown, 1.8f, Time.deltaTime * 5);
 				shipGravity = Mathf.Lerp(shipGravity, shipPhysicsFlightGravity * (rigidbody.drag + shipPhysicsMass), Time.deltaTime * shipFallingSlowdown);
 
 				// Terminal Velocity Check
@@ -996,14 +967,14 @@ public class ShipController : MonoBehaviour {
 				}
 			} else 
 			{
-				if (shipGravity > shipPhysicsTrackGravity * (shipPhysicsFlightGravity / rigidbody.drag) / rigidbody.drag)
+				if (shipGravity > shipPhysicsTrackGravity * (shipPhysicsFlightGravity / rigidbody.drag) / (rigidbody.drag * 2))
 				{
-					shipGravity = shipPhysicsTrackGravity * (shipPhysicsFlightGravity / rigidbody.drag) / rigidbody.drag;
+					shipGravity = shipPhysicsTrackGravity * (shipPhysicsFlightGravity / rigidbody.drag) / (rigidbody.drag * 2);
 				}
 
 				if (frontHit.distance > shipAntiGravRideHeight + (shipAntiGravReboundJumpTime / 2) && isAR)
 				{
-					shipGravity = shipPhysicsTrackGravity * (shipPhysicsFlightGravity / rigidbody.drag) / rigidbody.drag;
+					shipGravity = shipPhysicsTrackGravity * (shipPhysicsFlightGravity / rigidbody.drag) / (rigidbody.drag * 2);
 				}
 				shipFallingSlowdown = Mathf.Lerp( shipFallingSlowdown, shipAntiGravRebound * 10, Time.deltaTime * shipAntiGravLandingRebound);
 				shipGravity = Mathf.Lerp(shipGravity, shipPhysicsTrackGravity * (shipPhysicsFlightGravity / rigidbody.drag) / rigidbody.drag, Time.deltaTime * shipFallingSlowdown);
@@ -1262,7 +1233,7 @@ public class ShipController : MonoBehaviour {
 			}
 			else
 			{
-				shipBankSpeed = Mathf.Lerp(shipBankSpeed, 1.2f, Time.fixedDeltaTime * 5);
+				shipBankSpeed = Mathf.Lerp(shipBankSpeed, 2f, Time.fixedDeltaTime * 5);
 			}
 			shipBankVelocity = Mathf.Lerp (shipBankVelocity, shipBankSpeed, Time.deltaTime * 50);
 		}
@@ -1283,7 +1254,7 @@ public class ShipController : MonoBehaviour {
 			}
 			else
 			{
-				shipBankSpeed = Mathf.Lerp(shipBankSpeed, 1.2f, Time.fixedDeltaTime * 5);
+				shipBankSpeed = Mathf.Lerp(shipBankSpeed, 2f, Time.fixedDeltaTime * 5);
 			}
 			shipBankVelocity = Mathf.Lerp (shipBankVelocity, shipBankSpeed, Time.deltaTime * 50);
 		}
@@ -1293,18 +1264,18 @@ public class ShipController : MonoBehaviour {
 			shipBankSpeed = 0;
 			if (shipCurrentBank < 0)
 			{
-				if (shipCurrentBank < -25)
+				if (shipCurrentBank < -15)
 				{
-					shipReturnBankSpeed = Mathf.Lerp(shipReturnBankSpeed, 4f, Time.fixedDeltaTime * 2);
+					shipReturnBankSpeed = Mathf.Lerp(shipReturnBankSpeed, 4.5f, Time.fixedDeltaTime * 2);
 				} else 
 				{
 					shipReturnBankSpeed = Mathf.Lerp(shipReturnBankSpeed, 2.5f, Time.fixedDeltaTime * 3);
 				}
 			} else
 			{
-				if (shipCurrentBank > 25)
+				if (shipCurrentBank > 15)
 				{
-					shipReturnBankSpeed = Mathf.Lerp(shipReturnBankSpeed, 4f, Time.fixedDeltaTime * 2);
+					shipReturnBankSpeed = Mathf.Lerp(shipReturnBankSpeed, 4.5f, Time.fixedDeltaTime * 2);
 				} else 
 				{
 					shipReturnBankSpeed = Mathf.Lerp(shipReturnBankSpeed, 2.5f, Time.fixedDeltaTime * 3);
@@ -1414,7 +1385,7 @@ public class ShipController : MonoBehaviour {
 			{
 				if (isGrounded)
 				{
-					shipAirBrakeAccelLossVelocityDamper = Mathf.Lerp (shipAirBrakeAccelLossVelocityDamper, shipAntiGravGripAir * 1.2f, Time.deltaTime * 3);
+					shipAirBrakeAccelLossVelocityDamper = Mathf.Lerp (shipAirBrakeAccelLossVelocityDamper, shipAntiGravGripAir * 1.6f, Time.deltaTime * 3);
 				} else 
 				{
 					shipAirBrakeAccelLossVelocityDamper = Mathf.Lerp (shipAirBrakeAccelLossVelocityDamper, shipAntiGravGripGround * rigidbody.drag, Time.deltaTime * shipAirbrakeGrip);
@@ -1493,7 +1464,7 @@ public class ShipController : MonoBehaviour {
 		
 		if (hasSideShiftLeft)
 		{
-			if (sideShiftTimer < 10)
+			if (sideShiftTimer < 12)
 			{
 				rigidbody.AddRelativeForce(transform.InverseTransformDirection(-transform.right) * shipAirbrakeSideShiftAmount);
 			}
@@ -1501,7 +1472,7 @@ public class ShipController : MonoBehaviour {
 		
 		if (hasSideShiftRight)
 		{
-			if (sideShiftTimer < 10)
+			if (sideShiftTimer < 12)
 			{
 				
 				rigidbody.AddRelativeForce(transform.InverseTransformDirection(transform.right) * shipAirbrakeSideShiftAmount);
@@ -1954,10 +1925,10 @@ public class ShipController : MonoBehaviour {
 			shipGravityHover = 100;
 			stopForce = 1000;
 
-			hoverRotToSpeed = 20;
-			hoverRotNowSpeed = 18;
+			hoverRotToSpeed = 30;
+			hoverRotNowSpeed = 28;
 
-			groundAngularDrag = 5;
+			groundAngularDrag = 50;
 		}
 
 		if (thisShip == RaceInformation.ShipTypes.Speed)
@@ -1966,10 +1937,10 @@ public class ShipController : MonoBehaviour {
 			shipGravityHover = 1;
 			stopForce = 800;
 
-			hoverRotToSpeed = 18;
-			hoverRotNowSpeed = 16;
+			hoverRotToSpeed = 30;
+			hoverRotNowSpeed = 28;
 
-			groundAngularDrag = 1;
+			groundAngularDrag = 50;
 		}
 
 		if (thisShip == RaceInformation.ShipTypes.Fighter)
@@ -1978,10 +1949,10 @@ public class ShipController : MonoBehaviour {
 			shipGravityHover = 10;
 			stopForce = 500;
 
-			hoverRotToSpeed = 20;
-			hoverRotNowSpeed = 18;
+			hoverRotToSpeed = 30;
+			hoverRotNowSpeed = 28;
 
-			groundAngularDrag = 5;
+			groundAngularDrag = 50;
 		}
 
 	}

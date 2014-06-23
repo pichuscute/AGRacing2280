@@ -172,7 +172,7 @@ public class ContrastStretchEffect : MonoBehaviour
 		
 		// Adaptation speed is expressed in percents/frame, based on 30FPS.
 		// Calculate the adaptation lerp, based on current FPS.
-		float adaptLerp = 1.0f - Mathf.Pow( 1.0f - adaptationSpeed, 30.0f * Time.fixedDeltaTime );
+		float adaptLerp = 1.0f - Mathf.Pow( 1.0f - adaptationSpeed, 30.0f * Time.deltaTime );
 		const float kMinAdaptLerp = 0.01f;
 		adaptLerp = Mathf.Clamp( adaptLerp, kMinAdaptLerp, 1 );
 		

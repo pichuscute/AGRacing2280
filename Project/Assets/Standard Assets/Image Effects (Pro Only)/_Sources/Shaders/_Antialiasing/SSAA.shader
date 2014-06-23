@@ -24,7 +24,7 @@ SubShader {
 	uniform float4 _MainTex_TexelSize;
 
 	struct v2f {
-		float4 pos : POSITION;
+		float4 pos : SV_POSITION;
 		float2 uv[5] : TEXCOORD0;
 	};
 
@@ -49,7 +49,7 @@ SubShader {
 		return o;
 	}
 
-	half4 frag (v2f i) : COLOR
+	half4 frag (v2f i) : SV_Target
 	{		 	 
 		half4 outColor;
 		

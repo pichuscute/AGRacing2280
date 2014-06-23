@@ -16,7 +16,7 @@ CGPROGRAM
 #include "UnityCG.cginc"
 
 struct v2f { 
-	float4 pos	: POSITION;
+	float4 pos	: SV_POSITION;
 	float2 uv	: TEXCOORD0;
 	float2 uvg	: TEXCOORD1; // grain
 	float2 uvs	: TEXCOORD2; // scratch
@@ -40,7 +40,7 @@ v2f vert (appdata_img v)
 	return o;
 }
 
-fixed4 frag (v2f i) : COLOR
+fixed4 frag (v2f i) : SV_Target
 {
 	fixed4 col = tex2D(_MainTex, i.uv);
 	

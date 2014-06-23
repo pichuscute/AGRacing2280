@@ -20,12 +20,12 @@
 	#define NUM_SAMPLES (19)
 
 	struct v2f {
-		float4 pos : POSITION;
+		float4 pos : SV_POSITION;
 		float2 uv  : TEXCOORD0;
 	};
 				
 	sampler2D _MainTex;
-	sampler2D _CameraDepthTexture;
+	sampler2D_float _CameraDepthTexture;
 	sampler2D _VelTex;
 	sampler2D _NeighbourMaxTex;
 	sampler2D _NoiseTex;
@@ -64,7 +64,7 @@
 	}
 
 	// find dominant velocity in each tile
-	float4 TileMax(v2f i) : COLOR
+	float4 TileMax(v2f i) : SV_Target
 	{
 		float2 tilemax = float2(0.0, 0.0);
 		float2 srcPos = i.uv - _MainTex_TexelSize.xy * _MaxRadiusOrKInPaper * 0.5;
@@ -79,7 +79,7 @@
 	}
 
 	// find maximum velocity in any adjacent tile
-	float4 NeighbourMax(v2f i) : COLOR
+	float4 NeighbourMax(v2f i) : SV_Target
 	{
 		float2 maxvel = float2(0.0, 0.0);
 		for(int y=-1; y<=1; y++) {
@@ -107,7 +107,7 @@
 		return clamp(1.0 - (za - zb) / _SoftZDistance, 0.0, 1.0);
 	}
 
-	float4 ReconstructFilterBlur(v2f i) : COLOR
+	float4 ReconstructFilterBlur(v2f i) : SV_Target
 	{	
 		float2 x = i.uv;
 		float2 xf = x;
@@ -122,7 +122,7 @@
 		float2 vn = tex2D(_NeighbourMaxTex, x2).xy;	// largest velocity in neighbourhood
 		float4 cx = tex2D(_MainTex, x);				// color at x
 
-		float zx = UNITY_SAMPLE_DEPTH(tex2D(_CameraDepthTexture, x));
+		float zx = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, x);
 		zx = -Linear01Depth(zx);					// depth at x
 		float2 vx = tex2D(_VelTex, xf).xy;			// vel at x 
 
@@ -159,7 +159,7 @@
 			// velocity at y 
 			float2 vy = tex2Dlod(_VelTex, float4(yf,0,0)).xy;
 
-			float zy = UNITY_SAMPLE_DEPTH(tex2Dlod(_CameraDepthTexture, float4(y,0,0))); 
+			float zy = SAMPLE_DEPTH_TEXTURE_LOD(_CameraDepthTexture, float4(y,0,0))); 
 			zy = -Linear01Depth(zy);
 			float f = softDepthCompare(zx, zy);
 			float b = softDepthCompare(zy, zx);
